@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{{ artisan.user.get_full_name }} — Products{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row">
+    <div class="col-lg-8">
+      <h2 class="mb-3">Products by {{ artisan.user.get_full_name }}</h2>
+
+      {% if products %}
+        <div class="row g-3">
+          {% for product in products %}
+            <div class="col-md-6 col-lg-4">
+              <div class="card h-100">
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                <div class="card-body">
+                  <h5 class="card-title">{{ product.name }}</h5>
+                  <p class="card-text small text-muted">{% if product.category %}{{ product.category.name }}{% endif %}</p>
+                  <p class="card-text">₹{{ product.price }}</p>
+                  <a href="{% url 'product_detail' product_id=product.id %}" class="btn btn-sm btn-primary">View</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="alert alert-info">No products found for this artisan.</div>
+      {% endif %}
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card p-3">
+        <h5>About the Artisan</h5>
+        <p>{{ artisan.description }}</p>
+        <p><strong>Craft:</strong> {{ artisan.craft_type }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

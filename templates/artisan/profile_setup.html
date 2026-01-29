@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Artisan Profile Setup{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <h3 class="mb-3">Complete your Artisan profile</h3>
+
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+
+          <form method="post" novalidate>
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label class="form-label">Craft Type</label>
+              {{ form.craft_type }}
+              {% if form.craft_type.errors %}
+                <div class="text-danger small">{{ form.craft_type.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              {{ form.description }}
+              {% if form.description.errors %}
+                <div class="text-danger small">{{ form.description.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Years of Experience</label>
+                {{ form.years_of_experience }}
+                {% if form.years_of_experience.errors %}
+                  <div class="text-danger small">{{ form.years_of_experience.errors }}</div>
+                {% endif %}
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Workshop Location</label>
+                {{ form.workshop_location }}
+                {% if form.workshop_location.errors %}
+                  <div class="text-danger small">{{ form.workshop_location.errors }}</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Website</label>
+              {{ form.website }}
+              {% if form.website.errors %}
+                <div class="text-danger small">{{ form.website.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Instagram</label>
+                {{ form.instagram }}
+                {% if form.instagram.errors %}
+                  <div class="text-danger small">{{ form.instagram.errors }}</div>
+                {% endif %}
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Facebook</label>
+                {{ form.facebook }}
+                {% if form.facebook.errors %}
+                  <div class="text-danger small">{{ form.facebook.errors }}</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-success">Save Profile</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

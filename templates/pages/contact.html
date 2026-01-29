@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us - Artisan Edge{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="mb-4">Connect & Compete</h1>
+            
+            {% if messages %}
+                <div class="alert-container">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Gain Your Competitive Edge</h3>
+                    <form method="POST" class="needs-validation">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" name="phone">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Subject <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="subject" name="subject" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="message" name="message" rows="4" placeholder="Tell us about your goals and how Artisan Edge can help you gain a competitive advantage" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Get My Edge</button>
+                    </form>
+                </div>
+
+                <div class="col-md-6">
+                    <h3>Frequently Asked Questions</h3>
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
+                                    How do artisans gain competitive advantage?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Through AI tools, market analytics, technology integration, and strategic influencer partnerships that position their crafts above mass production.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+                                    What's the ROI for influencers?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    15-25% commission plus performance bonuses. Our data shows 300%+ higher engagement rates compared to generic brand partnerships.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+                                    How do you ensure product quality edge?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Advanced quality control systems, 3D scanning, AI-powered defect detection, and continuous performance monitoring.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
+                                    What if competitors copy our approach?
+                                </button>
+                            </h2>
+                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Our AI continuously evolves strategies. Plus, authentic artisan heritage and personal stories can't be replicated by competitors.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" aria-expanded="false" aria-controls="faq5">
+                                    How does AI give artisans an edge?
+                                </button>
+                            </h2>
+                            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Market trend analysis, pricing optimization, content creation, customer behavior prediction, and personalized marketing strategies.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="mt-5 p-4 bg-light rounded">
+                <h3 class="text-center mb-4">Get in Touch</h3>
+                <div class="row">
+                    <div class="col-md-4 text-center mb-3">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">📧</div>
+                        <h5>Email</h5>
+                        <p><a href="mailto:contact@artisanedge.com">contact@artisanedge.com</a></p>
+                    </div>
+                    <div class="col-md-4 text-center mb-3">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">📞</div>
+                        <h5>Phone</h5>
+                        <p><a href="tel:+1234567890">+1 (234) 567-890</a></p>
+                    </div>
+                    <div class="col-md-4 text-center mb-3">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">📍</div>
+                        <h5>Address</h5>
+                        <p>123 Artisan Street<br>Creative City, CC 12345</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .alert-container {
+        margin-bottom: 2rem;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #333;
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: #f0f8f0;
+        color: #2c5f2d;
+    }
+
+    .accordion-button:focus {
+        border-color: #2c5f2d;
+        box-shadow: 0 0 0 0.25rem rgba(44, 95, 45, 0.25);
+    }
+</style>
+{% endblock %}

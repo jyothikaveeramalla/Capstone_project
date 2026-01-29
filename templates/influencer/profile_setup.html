@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Influencer Profile Setup{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <h3 class="mb-3">Complete your Influencer profile</h3>
+
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+
+          <form method="post" novalidate>
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label class="form-label">Niche</label>
+              {{ form.niche }}
+              {% if form.niche.errors %}
+                <div class="text-danger small">{{ form.niche.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Bio</label>
+              {{ form.bio }}
+              {% if form.bio.errors %}
+                <div class="text-danger small">{{ form.bio.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Instagram URL</label>
+                {{ form.instagram_url }}
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">YouTube URL</label>
+                {{ form.youtube_url }}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Instagram Followers</label>
+                {{ form.instagram_followers }}
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">YouTube Followers</label>
+                {{ form.youtube_followers }}
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Collaboration Rate (USD)</label>
+              {{ form.collaboration_rate }}
+            </div>
+
+            <button type="submit" class="btn btn-success">Save Profile</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

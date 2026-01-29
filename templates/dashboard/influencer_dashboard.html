@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+
+{% block title %}Influencer Dashboard - Artisan Edge{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-lg-3 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ user.get_full_name }}</h5>
+                    <p class="text-muted small">{{ influencer.niche }}</p>
+                    <hr>
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="{% url 'dashboard' %}">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                        <a class="nav-link" href="{% url 'profile' %}">
+                            <i class="fas fa-user"></i> My Profile
+                        </a>
+                        <a class="nav-link" href="{% url 'collaborations_list' %}">
+                            <i class="fas fa-handshake"></i> Collaborations
+                        </a>
+                        <a class="nav-link" href="{% url 'orders_list' %}">
+                            <i class="fas fa-box"></i> My Orders
+                        </a>
+                        <hr class="my-2">
+                        <a class="nav-link" href="{% url 'artisans_list' %}">
+                            <i class="fas fa-users"></i> Discover Artisans
+                        </a>
+                        <a class="nav-link" href="{% url 'products_list' %}">
+                            <i class="fas fa-shopping-bag"></i> All Products
+                        </a>
+                        <hr class="my-2">
+                        <a class="nav-link text-danger" href="{% url 'logout' %}">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <!-- Welcome Banner -->
+            <div class="alert alert-info border-0 shadow-sm" role="alert">
+                <h4 class="alert-heading">Welcome, {{ user.first_name }}!</h4>
+                <p>Collaborate with artisans, discover unique products, and amplify sustainable fashion to your audience.</p>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm text-center">
+                        <div class="card-body">
+                            <div style="font-size: 2rem; color: #2c5f2d; margin-bottom: 0.5rem;">📱</div>
+                            <h6 class="text-muted">Total Followers</h6>
+                            <h3 class="mb-0">{{ influencer.total_followers }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm text-center">
+                        <div class="card-body">
+                            <div style="font-size: 2rem; color: #2c5f2d; margin-bottom: 0.5rem;">🤝</div>
+                            <h6 class="text-muted">Active Collaborations</h6>
+                            <h3 class="mb-0">{{ active_collaborations }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm text-center">
+                        <div class="card-body">
+                            <div style="font-size: 2rem; color: #2c5f2d; margin-bottom: 0.5rem;">⭐</div>
+                            <h6 class="text-muted">Rating</h6>
+                            <h3 class="mb-0">{{ influencer.rating }}/5</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Status -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-light border-bottom">
+                    <h5 class="mb-0">Profile Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Niche:</strong> {{ influencer.niche }}</p>
+                            <p><strong>Verification Status:</strong> 
+                                {% if influencer.is_verified %}
+                                    <span class="badge bg-success">Verified ✓</span>
+                                {% else %}
+                                    <span class="badge bg-warning">Pending Verification</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Collaboration Rate:</strong> {{ influencer.collaboration_rate }}%</p>
+                            <p><strong>Featured:</strong> 
+                                {% if influencer.is_featured %}
+                                    <span class="badge bg-success">Yes</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">No</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <a href="{% url 'profile' %}" class="btn btn-primary">Edit Profile</a>
+                </div>
+            </div>
+
+            <!-- Active Collaborations -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-light border-bottom">
+                    <h5 class="mb-0">Active Collaborations</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm text-center">
+                                <div class="card-body">
+                                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎨</div>
+                                    <h6 class="card-title">Textile Artisan</h6>
+                                    <p class="text-muted small">Handwoven products</p>
+                                    <a href="{% url 'collaborations_list' %}" class="btn btn-sm btn-outline-primary">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if not active_collaborations %}
+                        <div class="text-center py-4">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🤝</div>
+                            <p class="text-muted">No active collaborations yet</p>
+                            <a href="{% url 'artisans_list' %}" class="btn btn-primary">Discover Artisans</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-light border-bottom">
+                    <h5 class="mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <a href="{% url 'artisans_list' %}" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-search"></i> Find Artisans
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{% url 'collaborations_list' %}" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-handshake"></i> My Collaborations
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{% url 'profile' %}" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-cog"></i> Settings
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .nav-link {
+        color: #333;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+        background-color: #f0f8f0;
+        color: #2c5f2d;
+    }
+
+    .nav-link.active {
+        background-color: #2c5f2d;
+        color: white;
+    }
+
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}

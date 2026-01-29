@@ -5,6 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marketplace - Artisan Edge</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .auth-message {
+            padding: 1rem;
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            margin: 2rem 0;
+            text-align: center;
+            color: #856404;
+        }
+
+        .auth-message a {
+            color: #0c5460;
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 2px solid #0c5460;
+        }
+
+        .auth-message a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -30,6 +52,10 @@
             <h2 class="section-title">Shop with an Edge</h2>
             <div style="text-align: center; margin-bottom: 2rem;">
                 <p style="font-size: 1.2rem;">Discover cutting-edge craftsmanship that outperforms mass production</p>
+            </div>
+
+            <div id="authPrompt" class="auth-message" style="display: none;">
+                <p>⚠️ You need to sign in to add items to your cart. <a href="signin.html">Sign in</a> or <a href="signup.html">sign up</a> to continue shopping!</p>
             </div>
 
             <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap;">
@@ -225,6 +251,7 @@
         </div>
     </footer>
 
+    <script src="auth.js"></script>
     <script src="script.js"></script>
     <script>
         // Shopping cart functionality
@@ -247,6 +274,15 @@
         }
 
         function addToCart(productName, price) {
+            // Check if user is authenticated
+            if (!auth.isLoggedIn()) {
+                auth.setRedirectUrl(window.location.href);
+                const message = document.getElementById('authPrompt');
+                message.style.display = 'block';
+                message.scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
             cart.push({name: productName, price: price});
             updateCartDisplay();
         }
@@ -268,7 +304,18 @@
         }
 
         function checkout() {
-            alert('Checkout functionality would be implemented here. Total: ₹' + document.getElementById('cart-total').textContent);
+            // Check if user is authenticated
+            if (!auth.isLoggedIn()) {
+                auth.setRedirectUrl(window.location.href);
+                alert('Please sign in to proceed with checkout');
+                window.location.href = 'signin.html';
+                return;
+            }
+
+            const user = auth.getCurrentUser();
+            alert(`Order placed successfully for ${user.fullName}!\nTotal: ₹${document.getElementById('cart-total').textContent}\n\nIn production, this would process the payment and create an order in the database.`);
+            cart = [];
+            updateCartDisplay();
         }
 
         // Add event listeners to Add to Cart buttons

@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Products - Artisan Edge{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <!-- Sidebar Filters -->
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Filters</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" class="mb-3">
+                        <div class="mb-3">
+                            <label class="form-label">Search</label>
+                            <input type="text" name="search" class="form-control" value="{{ search }}" placeholder="Search products...">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <select name="category" class="form-select">
+                                <option value="">All Categories</option>
+                                {% for cat in categories %}
+                                    <option value="{{ cat.id }}" {% if category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Price Range</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="number" name="min_price" class="form-control" placeholder="Min">
+                                </div>
+                                <div class="col-6">
+                                    <input type="number" name="max_price" class="form-control" placeholder="Max">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" name="eco" class="form-check-input" id="ecoCheck">
+                            <label class="form-check-label" for="ecoCheck">
+                                Eco-friendly only
+                            </label>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" name="in_stock" class="form-check-input" id="stockCheck">
+                            <label class="form-check-label" for="stockCheck">
+                                In stock only
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Products -->
+        <div class="col-md-9">
+            <div class="row align-items-center mb-4">
+                <div class="col">
+                    <h2>Products</h2>
+                </div>
+                <div class="col-auto">
+                    <form method="get" class="d-flex">
+                        <select name="sort" class="form-select form-select-sm" onchange="this.form.submit()">
+                            <option value="-created_at" {% if sort == "-created_at" %}selected{% endif %}>Newest</option>
+                            <option value="price" {% if sort == "price" %}selected{% endif %}>Price: Low to High</option>
+                            <option value="-price" {% if sort == "-price" %}selected{% endif %}>Price: High to Low</option>
+                            <option value="-rating" {% if sort == "-rating" %}selected{% endif %}>Highest Rated</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+            
+            {% if products %}
+                <div class="row">
+                    {% for product in products %}
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card product-card h-100">
+                                {% if product.image %}
+                                    <img src="{{ product.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
+                                {% else %}
+                                    <div class="card-img-top product-image d-flex align-items-center justify-content-center" style="background-color: #ecf0f1;">
+                                        <i class="fas fa-box fa-3x text-muted"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ product.name }}</h5>
+                                    <p class="card-text text-muted small">{{ product.description|truncatewords:15 }}</p>
+                                    <div class="mb-2">
+                                        <span class="product-rating">
+                                            {% for i in "12345" %}
+                                                {% if i|add:"0" <= product.rating %}
+                                                    <i class="fas fa-star"></i>
+                                                {% else %}
+                                                    <i class="far fa-star"></i>
+                                                {% endif %}
+                                            {% endfor %}
+                                            ({{ product.review_count }})
+                                        </span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="h5 mb-0">${{ product.price }}</span>
+                                        {% if product.is_eco_friendly %}
+                                            <span class="badge bg-success">Eco-friendly</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if product.quantity_in_stock > 0 %}
+                                        <span class="badge bg-info">In Stock</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Out of Stock</span>
+                                    {% endif %}
+                                </div>
+                                <div class="card-footer bg-transparent">
+                                    <a href="{% url 'product_detail' product.id %}" class="btn btn-outline-primary w-100 btn-sm">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> No products found. Try adjusting your filters.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

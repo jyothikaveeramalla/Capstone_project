@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Product - Artisan Edge{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Header -->
+            <div class="mb-4">
+                <h1>Add New Product</h1>
+                <p class="text-muted">Share your handmade creation with the world</p>
+            </div>
+
+            <!-- Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Form Card -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <form method="POST" enctype="multipart/form-data" id="productForm" class="needs-validation">
+                        {% csrf_token %}
+
+                        <!-- Basic Information Section -->
+                        <h5 class="mb-3 text-primary border-bottom pb-2">Basic Information</h5>
+
+                        <!-- Product Name -->
+                        <div class="mb-3">
+                            <label for="{{ form.name.id_for_label }}" class="form-label">
+                                Product Name <span class="text-danger">*</span>
+                            </label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <div class="text-danger small mt-1">{{ form.name.errors }}</div>
+                            {% endif %}
+                            <small class="text-muted">Give your product a clear, descriptive name</small>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">
+                                Description <span class="text-danger">*</span>
+                            </label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                                <div class="text-danger small mt-1">{{ form.description.errors }}</div>
+                            {% endif %}
+                            <small class="text-muted">Describe your product, its features, and uses</small>
+                        </div>
+
+                        <!-- Category and Image Row -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.category.id_for_label }}" class="form-label">
+                                    Category <span class="text-danger">*</span>
+                                </label>
+                                {{ form.category }}
+                                {% if form.category.errors %}
+                                    <div class="text-danger small mt-1">{{ form.category.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.image.id_for_label }}" class="form-label">
+                                    Product Image <span class="text-danger">*</span>
+                                </label>
+                                {{ form.image }}
+                                {% if form.image.errors %}
+                                    <div class="text-danger small mt-1">{{ form.image.errors }}</div>
+                                {% endif %}
+                                <small class="text-muted">Upload a clear photo (JPG, PNG)</small>
+                            </div>
+                        </div>
+
+                        <!-- Pricing Section -->
+                        <h5 class="mb-3 text-primary border-bottom pb-2 mt-4">Pricing</h5>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.price.id_for_label }}" class="form-label">
+                                    Selling Price <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    {{ form.price }}
+                                </div>
+                                {% if form.price.errors %}
+                                    <div class="text-danger small mt-1">{{ form.price.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.cost_price.id_for_label }}" class="form-label">
+                                    Cost Price (For your tracking)
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    {{ form.cost_price }}
+                                </div>
+                                {% if form.cost_price.errors %}
+                                    <div class="text-danger small mt-1">{{ form.cost_price.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Inventory Section -->
+                        <h5 class="mb-3 text-primary border-bottom pb-2 mt-4">Inventory</h5>
+
+                        <div class="mb-3">
+                            <label for="{{ form.quantity_in_stock.id_for_label }}" class="form-label">
+                                Quantity in Stock <span class="text-danger">*</span>
+                            </label>
+                            {{ form.quantity_in_stock }}
+                            {% if form.quantity_in_stock.errors %}
+                                <div class="text-danger small mt-1">{{ form.quantity_in_stock.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Product Details Section -->
+                        <h5 class="mb-3 text-primary border-bottom pb-2 mt-4">Product Details</h5>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.material.id_for_label }}" class="form-label">Material</label>
+                                {{ form.material }}
+                                {% if form.material.errors %}
+                                    <div class="text-danger small mt-1">{{ form.material.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.dimensions.id_for_label }}" class="form-label">Dimensions</label>
+                                {{ form.dimensions }}
+                                {% if form.dimensions.errors %}
+                                    <div class="text-danger small mt-1">{{ form.dimensions.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.weight.id_for_label }}" class="form-label">Weight (grams)</label>
+                                {{ form.weight }}
+                                {% if form.weight.errors %}
+                                    <div class="text-danger small mt-1">{{ form.weight.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Sustainability Section -->
+                        <h5 class="mb-3 text-primary border-bottom pb-2 mt-4">Sustainability</h5>
+
+                        <div class="mb-3 form-check">
+                            {{ form.is_eco_friendly }}
+                            <label class="form-check-label" for="{{ form.is_eco_friendly.id_for_label }}">
+                                This is an eco-friendly product
+                            </label>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.sustainability_notes.id_for_label }}" class="form-label">
+                                Sustainability Notes
+                            </label>
+                            {{ form.sustainability_notes }}
+                            {% if form.sustainability_notes.errors %}
+                                <div class="text-danger small mt-1">{{ form.sustainability_notes.errors }}</div>
+                            {% endif %}
+                            <small class="text-muted">Tell customers about the eco-friendly aspects of your product</small>
+                        </div>
+
+                        <!-- Status Section -->
+                        <h5 class="mb-3 text-primary border-bottom pb-2 mt-4">Status</h5>
+
+                        <div class="mb-4">
+                            <label for="{{ form.status.id_for_label }}" class="form-label">Product Status</label>
+                            {{ form.status }}
+                            {% if form.status.errors %}
+                                <div class="text-danger small mt-1">{{ form.status.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'my_products' %}" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary btn-lg">Add Product</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control, .form-select {
+        border: 1.5px solid #e0e0e0;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #2c5f2d;
+        box-shadow: 0 0 0 0.2rem rgba(44, 95, 45, 0.15);
+    }
+
+    .text-primary {
+        color: #2c5f2d !important;
+    }
+
+    h5 {
+        font-weight: 600;
+    }
+</style>
+{% endblock %}

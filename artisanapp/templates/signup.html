@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Artisan Edge</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .auth-container {
+            max-width: 600px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: #f0f8f0;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            color: #2c5f2d;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.75rem;
+            border: 2px solid #e8f5e8;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2c5f2d;
+            background: white;
+        }
+
+        .role-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .role-card {
+            padding: 1rem;
+            border: 2px solid #e8f5e8;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            background: white;
+        }
+
+        .role-card:hover {
+            border-color: #2c5f2d;
+            transform: translateY(-2px);
+        }
+
+        .role-card.selected {
+            background: #2c5f2d;
+            color: white;
+            border-color: #2c5f2d;
+        }
+
+        .role-card-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .role-card-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .role-card-description {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .auth-button {
+            padding: 0.75rem;
+            background: #2c5f2d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .auth-button:hover {
+            background: #1e4620;
+        }
+
+        .auth-button:disabled {
+            background: #a0c9a0;
+            cursor: not-allowed;
+        }
+
+        .auth-link {
+            text-align: center;
+            color: #2c5f2d;
+            font-size: 0.95rem;
+        }
+
+        .auth-link a {
+            color: #2c5f2d;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .auth-link a:hover {
+            border-bottom-color: #2c5f2d;
+        }
+
+        .error-message {
+            padding: 1rem;
+            background: #fee;
+            color: #c33;
+            border-radius: 8px;
+            border-left: 4px solid #c33;
+            display: none;
+            margin-bottom: 1rem;
+        }
+
+        .success-message {
+            padding: 1rem;
+            background: #efe;
+            color: #3c3;
+            border-radius: 8px;
+            border-left: 4px solid #3c3;
+            display: none;
+            margin-bottom: 1rem;
+        }
+
+        .password-requirements {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.25rem 0;
+        }
+
+        .requirement-check {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .requirement-check.met {
+            background: #4caf50;
+            color: white;
+        }
+
+        .input-helper-text {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">⚡ Artisan Edge</div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 1200px;">
+        <div class="auth-container">
+            <h2 style="text-align: center; color: #2c5f2d; margin-bottom: 1rem;">✨ Join Artisan Edge</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 2rem;">Choose your role to get started</p>
+
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+
+            <form class="auth-form" id="signupForm" onsubmit="handleSignUp(event)">
+                <!-- Role Selection -->
+                <div class="form-group">
+                    <label>Select Your Role</label>
+                    <div class="role-selector">
+                        <div class="role-card" onclick="selectRole(this, 'Artisan')">
+                            <div class="role-card-icon">🎨</div>
+                            <div class="role-card-title">Artisan</div>
+                            <div class="role-card-description">Sell your crafts</div>
+                        </div>
+                        <div class="role-card" onclick="selectRole(this, 'Influencer')">
+                            <div class="role-card-icon">⭐</div>
+                            <div class="role-card-title">Influencer</div>
+                            <div class="role-card-description">Promote & collaborate</div>
+                        </div>
+                        <div class="role-card" onclick="selectRole(this, 'Customer')">
+                            <div class="role-card-icon">🛍️</div>
+                            <div class="role-card-title">Customer</div>
+                            <div class="role-card-description">Shop & support</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="role" name="role" required>
+                </div>
+
+                <!-- Full Name -->
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" required placeholder="John Doe">
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="your@email.com">
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="At least 6 characters">
+                    <div class="password-requirements">
+                        <div class="requirement-item">
+                            <span class="requirement-check" id="lengthCheck">✓</span>
+                            <span>At least 6 characters</span>
+                        </div>
+                        <div class="requirement-item">
+                            <span class="requirement-check" id="uppercaseCheck">✓</span>
+                            <span>At least one uppercase letter (optional)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password">
+                </div>
+
+                <!-- Terms -->
+                <div class="form-group" style="flex-direction: row; gap: 0.5rem;">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms" style="margin: 0;">
+                        I agree to the <a href="#" style="color: #2c5f2d; text-decoration: underline;">Terms of Service</a> and 
+                        <a href="#" style="color: #2c5f2d; text-decoration: underline;">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="auth-button">Create Account</button>
+            </form>
+
+            <p class="auth-link">
+                Already have an account? <a href="signin.html">Sign in here</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="margin-top: 4rem;">
+        <div class="container">
+            <div style="text-align: center;">
+                <p>&copy; 2025 Artisan Edge. All rights reserved.</p>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+                    <a href="#" style="color: white; text-decoration: none;">Privacy Policy</a> | 
+                    <a href="#" style="color: white; text-decoration: none;">Terms of Service</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script>
+        // Prevent access if already logged in
+        redirectIfLoggedIn();
+
+        let selectedRole = null;
+
+        function selectRole(element, role) {
+            // Remove previous selection
+            document.querySelectorAll('.role-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+
+            // Add selection to clicked card
+            element.classList.add('selected');
+            selectedRole = role;
+            document.getElementById('role').value = role;
+        }
+
+        function validatePasswordRequirements() {
+            const password = document.getElementById('password').value;
+            const lengthCheck = password.length >= 6;
+            const uppercaseCheck = /[A-Z]/.test(password);
+
+            // Update requirement indicators
+            updateRequirementCheck('lengthCheck', lengthCheck);
+            updateRequirementCheck('uppercaseCheck', uppercaseCheck);
+
+            return lengthCheck;
+        }
+
+        function updateRequirementCheck(elementId, met) {
+            const element = document.getElementById(elementId);
+            if (met) {
+                element.classList.add('met');
+                element.textContent = '✓';
+            } else {
+                element.classList.remove('met');
+                element.textContent = '';
+            }
+        }
+
+        // Update requirement checks as user types
+        document.getElementById('password').addEventListener('input', validatePasswordRequirements);
+
+        function handleSignUp(event) {
+            event.preventDefault();
+
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const role = document.getElementById('role').value;
+            const termsAccepted = document.getElementById('terms').checked;
+
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+
+            // Validation
+            if (!role) {
+                errorDiv.textContent = 'Please select a role';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            if (!fullName.trim()) {
+                errorDiv.textContent = 'Please enter your full name';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                errorDiv.textContent = 'Passwords do not match';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            if (!termsAccepted) {
+                errorDiv.textContent = 'Please accept the Terms of Service';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            try {
+                if (auth.signup(email, password, fullName, role)) {
+                    successDiv.textContent = `Welcome, ${fullName}! Account created successfully. Redirecting to marketplace...`;
+                    successDiv.style.display = 'block';
+
+                    setTimeout(() => {
+                        window.location.href = 'marketplace.html';
+                    }, 1000);
+                }
+            } catch (error) {
+                errorDiv.textContent = 'An error occurred during signup. Please try again.';
+                errorDiv.style.display = 'block';
+                console.error('Signup error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

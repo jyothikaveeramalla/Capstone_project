@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Collaborations{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <h2 class="mb-4">Collaborations</h2>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="row">
+    <div class="col-md-6">
+      <h5>Pending Requests</h5>
+      {% if requests and requests.exists %}
+        <ul class="list-group">
+          {% for req in requests %}
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+              <div>
+                <strong>{{ req.title }}</strong>
+                <div class="small text-muted">With: {% if req.artisan %}{{ req.artisan.user.get_full_name }}{% endif %}{% if req.influencer %}{{ req.influencer.user.get_full_name }}{% endif %}</div>
+              </div>
+              <div>
+                <a href="{% url 'collab_request_detail' request_id=req.id %}" class="btn btn-sm btn-outline-primary">View</a>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div class="alert alert-info">No pending requests.</div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-6">
+      <h5>Active Collaborations</h5>
+      {% if active and active.exists %}
+        <ul class="list-group">
+          {% for a in active %}
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+              <div>
+                <strong>{{ a.title }}</strong>
+                <div class="small text-muted">Partner: {% if a.influencer %}{{ a.influencer.user.get_full_name }}{% endif %}{% if a.artisan %}{{ a.artisan.user.get_full_name }}{% endif %}</div>
+              </div>
+              <div>
+                <a href="{% url 'collab_detail' collab_id=a.id %}" class="btn btn-sm btn-outline-primary">Open</a>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div class="alert alert-info">No active collaborations.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

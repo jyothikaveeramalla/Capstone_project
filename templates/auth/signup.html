@@ -1,0 +1,369 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up - Artisan Edge{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <!-- Header -->
+                    <div class="text-center mb-4">
+                        <h2 class="card-title mb-2">Join Artisan Edge</h2>
+                        <p class="text-muted">Create your account and start your journey with us</p>
+                    </div>
+
+                    <!-- Display Errors -->
+                    {% if messages %}
+                        <div class="alert-container mb-4">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <form method="post" id="signupForm">
+                        {% csrf_token %}
+                        
+                        <!-- Name Fields Row -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.first_name.id_for_label }}" class="form-label">
+                                    First Name <span class="text-danger">*</span>
+                                </label>
+                                {{ form.first_name }}
+                                {% if form.first_name.errors %}
+                                    <div class="text-danger small mt-1">{{ form.first_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.last_name.id_for_label }}" class="form-label">
+                                    Last Name <span class="text-danger">*</span>
+                                </label>
+                                {{ form.last_name }}
+                                {% if form.last_name.errors %}
+                                    <div class="text-danger small mt-1">{{ form.last_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Email Field -->
+                        <div class="mb-3">
+                            <label for="{{ form.email.id_for_label }}" class="form-label">
+                                Email Address <span class="text-danger">*</span>
+                            </label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="text-danger small mt-1">{{ form.email.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Role Selection - Card-based UI -->
+                        <div class="mb-4">
+                            <label class="form-label d-block mb-3">
+                                What's your role? <span class="text-danger">*</span>
+                            </label>
+                            <div class="role-selection-container">
+                                <div class="role-cards">
+                                    <!-- Customer Role Card -->
+                                    <div class="role-card-wrapper">
+                                        <input 
+                                            type="radio" 
+                                            id="id_role_customer" 
+                                            name="role" 
+                                            value="customer"
+                                            class="role-radio"
+                                            {% if form.role.value == 'customer' %}checked{% endif %}
+                                        >
+                                        <label for="id_role_customer" class="role-card">
+                                            <div class="role-icon">🛍️</div>
+                                            <div class="role-title">Customer</div>
+                                            <div class="role-description">
+                                                Shop sustainable products from talented artisans
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <!-- Artisan Role Card -->
+                                    <div class="role-card-wrapper">
+                                        <input 
+                                            type="radio" 
+                                            id="id_role_artisan" 
+                                            name="role" 
+                                            value="artisan"
+                                            class="role-radio"
+                                            {% if form.role.value == 'artisan' %}checked{% endif %}
+                                        >
+                                        <label for="id_role_artisan" class="role-card">
+                                            <div class="role-icon">🎨</div>
+                                            <div class="role-title">Artisan</div>
+                                            <div class="role-description">
+                                                Sell your handmade products to a global audience
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <!-- Influencer Role Card -->
+                                    <div class="role-card-wrapper">
+                                        <input 
+                                            type="radio" 
+                                            id="id_role_influencer" 
+                                            name="role" 
+                                            value="influencer"
+                                            class="role-radio"
+                                            {% if form.role.value == 'influencer' %}checked{% endif %}
+                                        >
+                                        <label for="id_role_influencer" class="role-card">
+                                            <div class="role-icon">⭐</div>
+                                            <div class="role-title">Influencer</div>
+                                            <div class="role-description">
+                                                Collaborate with artisans and earn commissions
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if form.role.errors %}
+                                <div class="text-danger small mt-2">{{ form.role.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Password Fields -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.password1.id_for_label }}" class="form-label">
+                                    Password <span class="text-danger">*</span>
+                                </label>
+                                {{ form.password1 }}
+                                {% if form.password1.errors %}
+                                    <div class="text-danger small mt-1">{{ form.password1.errors }}</div>
+                                {% endif %}
+                                <small class="text-muted d-block mt-1">
+                                    • At least 8 characters<br>
+                                    • Mix of letters and numbers
+                                </small>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.password2.id_for_label }}" class="form-label">
+                                    Confirm Password <span class="text-danger">*</span>
+                                </label>
+                                {{ form.password2 }}
+                                {% if form.password2.errors %}
+                                    <div class="text-danger small mt-1">{{ form.password2.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mt-3 mb-3">
+                            Create Account
+                        </button>
+                    </form>
+                    
+                    <!-- Sign In Link -->
+                    <p class="text-center text-muted">
+                        Already have an account? <a href="{% url 'signin' %}" class="text-primary">Sign In</a>
+                    </p>
+
+                    <!-- Terms -->
+                    <p class="text-center text-muted small mt-3">
+                        By signing up, you agree to our 
+                        <a href="/about/" class="text-primary">Terms of Service</a> and 
+                        <a href="/contact/" class="text-primary">Privacy Policy</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Role Selection Styles -->
+<style>
+    /* Form Controls */
+    .form-control, .form-select {
+        border: 1.5px solid #e0e0e0;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #2c5f2d;
+        box-shadow: 0 0 0 0.2rem rgba(44, 95, 45, 0.15);
+    }
+
+    .form-control.is-invalid {
+        border-color: #dc3545;
+    }
+
+    /* Role Selection Container */
+    .role-selection-container {
+        margin-bottom: 1rem;
+    }
+
+    .role-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    /* Role Card Wrapper */
+    .role-card-wrapper {
+        position: relative;
+    }
+
+    .role-radio {
+        display: none;
+    }
+
+    /* Role Card Styling */
+    .role-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem 1.25rem;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 0.75rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        min-height: 180px;
+    }
+
+    .role-card:hover {
+        border-color: #2c5f2d;
+        background-color: #f8fdf8;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(44, 95, 45, 0.1);
+    }
+
+    /* Selected State */
+    .role-radio:checked + .role-card {
+        background: linear-gradient(135deg, #f0f8f0 0%, #ffffff 100%);
+        border-color: #2c5f2d;
+        box-shadow: 0 8px 20px rgba(44, 95, 45, 0.2);
+        font-weight: 500;
+    }
+
+    .role-radio:checked + .role-card .role-icon {
+        transform: scale(1.2);
+        filter: brightness(1.2);
+    }
+
+    .role-radio:checked + .role-card .role-title {
+        color: #2c5f2d;
+    }
+
+    /* Role Icon */
+    .role-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.75rem;
+        transition: all 0.3s ease;
+    }
+
+    /* Role Title */
+    .role-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+        transition: color 0.3s ease;
+    }
+
+    /* Role Description */
+    .role-description {
+        font-size: 0.8rem;
+        color: #666;
+        line-height: 1.4;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 576px) {
+        .role-cards {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .role-card {
+            min-height: 140px;
+        }
+
+        .role-icon {
+            font-size: 2rem;
+        }
+
+        .role-title {
+            font-size: 0.95rem;
+        }
+    }
+
+    /* Form Validation Feedback */
+    .text-danger {
+        color: #dc3545 !important;
+        font-size: 0.875rem;
+    }
+
+    /* Card Shadow on Focus */
+    .card {
+        transition: box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    /* Password Requirements */
+    small[class*="text-muted"] {
+        display: block;
+        line-height: 1.6;
+    }
+</style>
+
+<!-- JavaScript for Enhanced UX -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-focus first empty field
+        const form = document.getElementById('signupForm');
+        const inputs = form.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]');
+        
+        let firstEmpty = null;
+        inputs.forEach(input => {
+            if (!input.value && !firstEmpty) {
+                firstEmpty = input;
+            }
+        });
+        
+        if (firstEmpty) {
+            firstEmpty.focus();
+        }
+
+        // Enhance role card selection
+        const roleRadios = document.querySelectorAll('.role-radio');
+        roleRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                console.log('Selected role:', this.value);
+            });
+        });
+
+        // Form submission tracking
+        form.addEventListener('submit', function(e) {
+            const selectedRole = document.querySelector('.role-radio:checked');
+            if (!selectedRole) {
+                e.preventDefault();
+                alert('Please select a role');
+            }
+        });
+    });
+</script>
+{% endblock %}
+

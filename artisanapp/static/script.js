@@ -3,7 +3,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
         form.addEventListener('submit', function(e) {
+            // Skip auth forms (signin, signup)
+            if (form.id === 'signinForm' || form.id === 'signupForm') {
+                return;
+            }
+
             e.preventDefault();
+
+            // Check if user is logged in for forms that require authentication
+            if (form.classList.contains('requires-auth')) {
+                if (!auth.isLoggedIn()) {
+                    auth.setRedirectUrl(window.location.href);
+                    window.location.href = 'signin.html';
+                    return;
+                }
+            }
+
             alert('Thank you for your interest! We\'ll get back to you soon.');
         });
     });
