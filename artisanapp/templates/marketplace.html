@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace - Artisan Edge</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">⚡ Artisan Edge</div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="artisans.html">For Artisans</a></li>
+                <li><a href="influencers.html">For Influencers</a></li>
+                <li><a href="marketplace.html">Marketplace</a></li>
+                <li><a href="stories.html">Stories</a></li>
+                <li><a href="impact.html">Impact</a></li>
+                <li><a href="how-it-works.html">How It Works</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-content">
+        <div class="container">
+            <h2 class="section-title">Shop with an Edge</h2>
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <p style="font-size: 1.2rem;">Discover cutting-edge craftsmanship that outperforms mass production</p>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap;">
+                <button class="btn btn-secondary" onclick="filterProducts('all')">All Categories</button>
+                <button class="btn btn-secondary" onclick="filterProducts('clothing')">Clothing</button>
+                <button class="btn btn-secondary" onclick="filterProducts('accessories')">Accessories</button>
+                <button class="btn btn-secondary" onclick="filterProducts('home-decor')">Home Decor</button>
+                <button class="btn btn-secondary" onclick="filterProducts('jewelry')">Jewelry</button>
+            </div>
+
+            <div class="product-grid">
+                <div class="product-card" data-category="clothing">
+                    <div class="product-image">🧥</div>
+                    <div class="product-info">
+                        <div class="eco-badge">Tech Enhanced</div>
+                        <h3>Smart-Woven Khadi Jacket</h3>
+                        <p><strong>Artisan:</strong> Meera Devi + AI Design Team</p>
+                        <p>Traditional spinning enhanced with moisture-wicking fibers and temperature regulation</p>
+                        <p style="color: #2c5f2d; font-weight: bold;">₹2,499</p>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card" data-category="jewelry">
+                    <div class="product-image">📿</div>
+                    <div class="product-info">
+                        <div class="eco-badge">Precision Crafted</div>
+                        <h3>Digital-Cast Silver Jewelry Set</h3>
+                        <p><strong>Artisan:</strong> Ravi Kumar + 3D Tech Lab</p>
+                        <p>Ancient techniques meet precision 3D modeling for perfect fit and durability</p>
+                        <p style="color: #2c5f2d; font-weight: bold;">₹4,999</p>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card" data-category="home-decor">
+                    <div class="product-image">🏺</div>
+                    <div class="product-info">
+                        <div class="eco-badge">Advanced Ceramics</div>
+                        <h3>Heat-Resistant Blue Pottery</h3>
+                        <p><strong>Artisan:</strong> Amit Sharma + Materials Lab</p>
+                        <p>Traditional glazing enhanced with advanced ceramic compounds for superior durability</p>
+                        <p style="color: #2c5f2d; font-weight: bold;">₹1,899</p>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card" data-category="accessories">
+                    <div class="product-image">👜</div>
+                    <div class="product-info">
+                        <div class="eco-badge">Innovation Edge</div>
+                        <h3>Multi-Function Jute Tote</h3>
+                        <p><strong>Artisan:</strong> Priya Das + Design Tech</p>
+                        <p>Handwoven jute with integrated phone charging pocket and water-resistant lining</p>
+                        <p style="color: #2c5f2d; font-weight: bold;">₹1,299</p>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card" data-category="accessories">
+                    <div class="product-image">🧣</div>
+                    <div class="product-info">
+                        <div class="eco-badge">Performance Edge</div>
+                        <h3>Climate-Adaptive Pashmina</h3>
+                        <p><strong>Artisan:</strong> Sonam Dolkar + Textile Tech</p>
+                        <p>Traditional yak wool enhanced with phase-change materials for temperature regulation</p>
+                        <p style="color: #2c5f2d; font-weight: bold;">₹6,999</p>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card" data-category="home-decor">
+                    <div class="product-image">🕯️</div>
+                    <div class="product-info">
+                        <div class="eco-badge">Smart Aromatics</div>
+                        <h3>App-Controlled Candle System</h3>
+                        <p><strong>Artisan:</strong> Maya Patel + IoT Integration</p>
+                        <p>Handmade soy candles with smart diffusion control and scent scheduling via mobile app</p>
+                        <p style="color: #2c5f2d; font-weight: bold;">₹899</p>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card" data-category="clothing">
+                    <div class="product-image">👕</div>
+                    <div class="product-info">
+                        <div class="eco-badge">Sustainable Tech</div>
+                        <h3>Bamboo Fiber Performance Shirt</h3>
+                        <p><strong>Artisan:</strong> Kiran Nair + Eco Lab</p>
+                        <p>Traditional weaving with bamboo fibers for natural antibacterial and cooling properties</p>
+                        <p style="color: #2c5f2d; font-weight: bold;">₹1,799</p>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card" data-category="jewelry">
+                    <div class="product-image">💍</div>
+                    <div class="product-info">
+                        <div class="eco-badge">Heritage Tech</div>
+                        <h3>Smart Traditional Bangles</h3>
+                        <p><strong>Artisan:</strong> Lakshmi Reddy + Wearable Tech</p>
+                        <p>Classical designs with embedded fitness tracking and notification features</p>
+                        <p style="color: #2c5f2d; font-weight: bold;">₹3,299</p>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Artisan Section -->
+            <div style="background: #f0f8f0; padding: 3rem; border-radius: 15px; margin: 4rem 0;">
+                <h3 style="text-align: center; margin-bottom: 2rem; color: #2c5f2d;">Featured Artisan of the Month</h3>
+                <div style="display: flex; align-items: center; gap: 3rem; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 300px;">
+                        <div style="width: 200px; height: 200px; background: linear-gradient(135deg, #2c5f2d, #4a8f4e); border-radius: 50%; margin: 0 auto 2rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem;">👨‍🎨</div>
+                    </div>
+                    <div style="flex: 2; min-width: 300px;">
+                        <h4 style="font-size: 1.8rem; margin-bottom: 1rem; color: #2c5f2d;">Master Craftsman Rajesh Verma</h4>
+                        <p style="font-size: 1.1rem; margin-bottom: 1rem;"><strong>Specialty:</strong> Traditional Madhubani Painting with Digital Enhancement</p>
+                        <p style="margin-bottom: 1rem;">Third-generation artist combining ancestral techniques with UV-resistant inks and digital color matching for museum-quality reproduction and longevity.</p>
+                        <p style="margin-bottom: 2rem;"><strong>Featured this month:</strong> Limited edition smart wall art with integrated LED backlighting that responds to ambient light.</p>
+                        <button class="btn btn-primary">View Collection</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trust Indicators -->
+            <div style="margin: 4rem 0;">
+                <h3 style="text-align: center; margin-bottom: 2rem; color: #2c5f2d;">Why Shop Artisan Edge</h3>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h4>Authenticity Guaranteed</h4>
+                        <p>Every product comes with blockchain-verified authenticity certificates and artisan documentation</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🚚</div>
+                        <h4>Free Shipping & Returns</h4>
+                        <p>Complimentary shipping on orders over ₹1,000 and hassle-free 30-day returns</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <h4>Direct Artisan Connection</h4>
+                        <p>Chat directly with artisans, request customizations, and learn about their craft heritage</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shopping Cart Summary -->
+            <div id="cart-summary" style="position: fixed; top: 70px; right: 20px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); padding: 1.5rem; z-index: 999; display: none;">
+                <h4 style="margin-bottom: 1rem; color: #2c5f2d;">Shopping Cart</h4>
+                <div id="cart-items"></div>
+                <div style="border-top: 1px solid #e8f5e8; margin-top: 1rem; padding-top: 1rem;">
+                    <p style="font-weight: bold; color: #2c5f2d;">Total: ₹<span id="cart-total">0</span></p>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="checkout()">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h3>⚡ Artisan Edge</h3>
+                    <p>Giving artisans the competitive edge through sustainable fashion collaborations</p>
+                    <div style="margin-top: 1rem;">
+                        <a href="#" style="color: white; margin-right: 1rem;">📘 Facebook</a>
+                        <a href="#" style="color: white; margin-right: 1rem;">📷 Instagram</a>
+                        <a href="#" style="color: white; margin-right: 1rem;">🐦 Twitter</a>
+                        <a href="#" style="color: white;">💼 LinkedIn</a>
+                    </div>
+                </div>
+                <div>
+                    <h4>For Artisans</h4>
+                    <p><a href="artisans.html" style="color: white; text-decoration: none;">Join Platform</a></p>
+                    <p><a href="#" style="color: white; text-decoration: none;">Upload Crafts</a></p>
+                    <p><a href="#" style="color: white; text-decoration: none;">AI Story Tools</a></p>
+                    <p><a href="#" style="color: white; text-decoration: none;">Payment Support</a></p>
+                    <p><a href="#" style="color: white; text-decoration: none;">Performance Analytics</a></p>
+                </div>
+                <div>
+                    <h4>For Influencers</h4>
+                    <p><a href="influencers.html" style="color: white; text-decoration: none;">Build Brand Edge</a></p>
+                    <p><a href="#" style="color: white; text-decoration: none;">Find Tech Artisans</a></p>
+                    <p><a href="#" style="color: white; text-decoration: none;">Advanced Campaigns</a></p>
+                    <p><a href="#" style="color: white; text-decoration: none;">Competitive Intelligence</a></p>
+                </div>
+                <div>
+                    <h4>Support</h4>
+                    <p><a href="#" style="color: white; text-decoration: none;">AI Help Center</a></p>
+                    <p><a href="#" style="color: white; text-decoration: none;">Competition Guidelines</a></p>
+                    <p><a href="#" style="color: white; text-decoration: none;">Privacy Policy</a></p>
+                    <p><a href="#" style="color: white; text-decoration: none;">Terms of Service</a></p>
+                </div>
+            </div>
+            <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 2rem; text-align: center;">
+                <p>&copy; 2025 Artisan Edge. Powered by cutting-edge AI and Google Cloud technology. Giving craftsmanship the competitive advantage.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Shopping cart functionality
+        let cart = [];
+
+        function filterProducts(category) {
+            const products = document.querySelectorAll('.product-card');
+            products.forEach(product => {
+                if (category === 'all' || product.dataset.category === category) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+            
+            // Update active button
+            const buttons = document.querySelectorAll('.btn-secondary');
+            buttons.forEach(btn => btn.style.background = 'transparent');
+            event.target.style.background = '#2c5f2d';
+        }
+
+        function addToCart(productName, price) {
+            cart.push({name: productName, price: price});
+            updateCartDisplay();
+        }
+
+        function updateCartDisplay() {
+            const cartSummary = document.getElementById('cart-summary');
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            
+            if (cart.length > 0) {
+                cartSummary.style.display = 'block';
+                cartItems.innerHTML = cart.map(item => 
+                    `<p>${item.name} - ₹${item.price}</p>`
+                ).join('');
+                cartTotal.textContent = cart.reduce((sum, item) => sum + parseInt(item.price.replace(',', '')), 0).toLocaleString();
+            } else {
+                cartSummary.style.display = 'none';
+            }
+        }
+
+        function checkout() {
+            alert('Checkout functionality would be implemented here. Total: ₹' + document.getElementById('cart-total').textContent);
+        }
+
+        // Add event listeners to Add to Cart buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const addToCartButtons = document.querySelectorAll('.product-card .btn-primary');
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const productCard = this.closest('.product-card');
+                    const productName = productCard.querySelector('h3').textContent;
+                    const productPrice = productCard.querySelector('p[style*="color: #2c5f2d"]').textContent.replace('₹', '').replace(',', '');
+                    addToCart(productName, productPrice);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
