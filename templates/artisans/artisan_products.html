@@ -4,36 +4,96 @@
 
 {% block content %}
 <div class="container my-5">
-  <div class="row">
+  <!-- Page Header with Management Buttons (Artisan Only) -->
+  <div class="row mb-4">
     <div class="col-lg-8">
       <h2 class="mb-3">Products by {{ artisan.user.get_full_name }}</h2>
+    </div>
+    {% if user.is_authenticated and user.is_artisan and user.artisan_profile.id == artisan.id %}
+      <div class="col-lg-4 text-end">
+        <a href="{% url 'add_product' %}" class="btn btn-success">
+          <i class="fas fa-plus"></i> Add Product
+        </a>
+        <a href="{% url 'my_products' %}" class="btn btn-info">
+          <i class="fas fa-cogs"></i> Manage Products
+        </a>
+      </div>
+    {% endif %}
+  </div>
 
+  <div class="row">
+    <div class="col-lg-8">
       {% if products %}
         <div class="row g-3">
           {% for product in products %}
             <div class="col-md-6 col-lg-4">
-              <div class="card h-100">
-                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+              <div class="card h-100 position-relative">
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                
+                <!-- Edit/Delete Buttons (Owner Only) -->
+                {% if user.is_authenticated and user.is_artisan and product.artisan.user.id == user.id %}
+                  <div class="position-absolute top-0 end-0 p-2" style="background: rgba(0,0,0,0.6); border-radius: 0 0 0 8px;">
+                    <a href="{% url 'edit_product' product.id %}" class="btn btn-sm btn-warning" title="Edit">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <form method="POST" action="{% url 'delete_product' product.id %}" style="display: inline;" 
+                          onsubmit="return confirm('Are you sure you want to delete this product?');">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </form>
+                  </div>
+                {% endif %}
+                
                 <div class="card-body">
                   <h5 class="card-title">{{ product.name }}</h5>
                   <p class="card-text small text-muted">{% if product.category %}{{ product.category.name }}{% endif %}</p>
-                  <p class="card-text">₹{{ product.price }}</p>
-                  <a href="{% url 'product_detail' product_id=product.id %}" class="btn btn-sm btn-primary">View</a>
+                  <p class="card-text"><strong>₹{{ product.price }}</strong></p>
+                  
+                  {% if product.is_eco_friendly %}
+                    <span class="badge bg-success mb-2">♻️ Eco-Friendly</span>
+                  {% endif %}
+                  
+                  <a href="{% url 'product_detail' product_id=product.id %}" class="btn btn-sm btn-primary w-100">View Details</a>
                 </div>
               </div>
             </div>
           {% endfor %}
         </div>
       {% else %}
-        <div class="alert alert-info">No products found for this artisan.</div>
+        <div class="alert alert-info">
+          <h5>No products found for this artisan.</h5>
+          {% if user.is_authenticated and user.is_artisan and user.artisan_profile.id == artisan.id %}
+            <p>Get started by <a href="{% url 'add_product' %}">adding your first product</a>.</p>
+          {% endif %}
+        </div>
       {% endif %}
     </div>
 
     <div class="col-lg-4">
-      <div class="card p-3">
+      <div class="card p-3 border-0 shadow-sm">
         <h5>About the Artisan</h5>
         <p>{{ artisan.description }}</p>
-        <p><strong>Craft:</strong> {{ artisan.craft_type }}</p>
+        <p><strong>Craft:</strong> {{ artisan.get_craft_type_display }}</p>
+        
+        <hr>
+        
+        <h6>Statistics</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2">
+            <strong>Rating:</strong> <span class="badge bg-success">{{ artisan.rating }}/5</span>
+          </li>
+          <li class="mb-2">
+            <strong>Products:</strong> <span>{{ artisan.total_products }}</span>
+          </li>
+          <li class="mb-2">
+            <strong>Total Sales:</strong> <span>{{ artisan.total_sales }}</span>
+          </li>
+          <li>
+            <strong>Experience:</strong> <span>{{ artisan.years_of_experience }} years</span>
+          </li>
+        </ul>
       </div>
     </div>
   </div>

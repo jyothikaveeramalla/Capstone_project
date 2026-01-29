@@ -31,6 +31,7 @@ urlpatterns = [
     
     # Apps
     path('artisans/', include('artisans.urls')),
+    path('influencers/', include('influencers.urls')),
     path('products/', include('products.urls')),
     path('cart/', include('cart.urls')),
     path('orders/', include('orders.urls')),

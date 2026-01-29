@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ influencer.user.get_full_name }} - Influencer Profile{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Influencer Profile Header -->
+    <div class="row mb-5">
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm text-center">
+                <div style="background: linear-gradient(135deg, #9b59b6, #e74c3c); height: 200px; display: flex; align-items: center; justify-content: center; color: white; font-size: 5rem;">
+                    📸
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h4>{{ influencer.user.get_full_name }}</h4>
+                        {% if influencer.is_verified %}
+                            <span class="badge bg-success" title="Verified">✓ Verified</span>
+                        {% endif %}
+                    </div>
+                    <p class="text-muted">{{ influencer.get_niche_display }}</p>
+                    
+                    <div class="my-3">
+                        <div class="mb-2">
+                            <strong>⭐ Rating</strong><br>
+                            <span class="badge bg-success">{{ influencer.rating }}/5</span>
+                        </div>
+                        <div class="mb-2">
+                            <strong>👥 Total Followers</strong><br>
+                            <span class="text-dark">{{ influencer.total_followers|default:"0" }}</span>
+                        </div>
+                        <div class="mb-2">
+                            <strong>🤝 Collaborations</strong><br>
+                            <span class="text-dark">{{ influencer.total_collaborations }}</span>
+                        </div>
+                        <div>
+                            <strong>💰 Collaboration Rate</strong><br>
+                            <span class="text-dark">{{ influencer.collaboration_rate }}%</span>
+                        </div>
+                    </div>
+
+                    {% if influencer.is_featured %}
+                        <span class="badge bg-warning text-dark mb-3">⭐ Featured Influencer</span>
+                    {% endif %}
+
+                    <div class="d-grid gap-2">
+                        {% if user.is_authenticated and user.is_artisan %}
+                            <a href="{% url 'new_collab_request' %}" class="btn btn-primary">
+                                Request Collaboration
+                            </a>
+                        {% elif user.is_authenticated %}
+                            <button class="btn btn-outline-secondary" disabled>
+                                Only artisans can request collaboration
+                            </button>
+                        {% else %}
+                            <a href="{% url 'signin' %}" class="btn btn-primary">
+                                Sign in to Collaborate
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Influencer Details -->
+        <div class="col-lg-9">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">About</h3>
+                    <p class="card-text">{{ influencer.bio }}</p>
+
+                    <hr>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5>Profile Details</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <strong>🎯 Niche:</strong><br>
+                                    {{ influencer.get_niche_display }}
+                                </li>
+                                <li class="mb-2">
+                                    <strong>📊 Status:</strong><br>
+                                    {% if influencer.is_verified %}
+                                        <span class="badge bg-success">Verified</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Pending Verification</span>
+                                    {% endif %}
+                                </li>
+                                <li class="mb-2">
+                                    <strong>📈 Member Since:</strong><br>
+                                    {{ influencer.created_at|date:"M d, Y" }}
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h5>Social Media Presence</h5>
+                            <ul class="list-unstyled">
+                                {% if influencer.instagram_handle %}
+                                    <li class="mb-2">
+                                        <strong>📸 Instagram:</strong><br>
+                                        <a href="https://instagram.com/{{ influencer.instagram_handle }}" target="_blank" class="text-decoration-none">
+                                            @{{ influencer.instagram_handle }}
+                                        </a>
+                                        {% if influencer.instagram_followers > 0 %}
+                                            <br><small class="text-muted">{{ influencer.instagram_followers|floatformat:0 }} followers</small>
+                                        {% endif %}
+                                    </li>
+                                {% endif %}
+                                
+                                {% if influencer.youtube_handle %}
+                                    <li class="mb-2">
+                                        <strong>📺 YouTube:</strong><br>
+                                        <a href="https://youtube.com/@{{ influencer.youtube_handle }}" target="_blank" class="text-decoration-none">
+                                            @{{ influencer.youtube_handle }}
+                                        </a>
+                                        {% if influencer.youtube_subscribers > 0 %}
+                                            <br><small class="text-muted">{{ influencer.youtube_subscribers|floatformat:0 }} subscribers</small>
+                                        {% endif %}
+                                    </li>
+                                {% endif %}
+                                
+                                {% if influencer.twitter_handle %}
+                                    <li class="mb-2">
+                                        <strong>𝕏 Twitter:</strong><br>
+                                        <a href="https://twitter.com/{{ influencer.twitter_handle }}" target="_blank" class="text-decoration-none">
+                                            @{{ influencer.twitter_handle }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                
+                                {% if influencer.facebook_link %}
+                                    <li class="mb-2">
+                                        <strong>📘 Facebook:</strong><br>
+                                        <a href="{{ influencer.facebook_link }}" target="_blank" class="text-decoration-none">
+                                            Facebook Page
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                
+                                {% if influencer.personal_website %}
+                                    <li class="mb-2">
+                                        <strong>🌐 Website:</strong><br>
+                                        <a href="{{ influencer.personal_website }}" target="_blank" class="text-decoration-none">
+                                            {{ influencer.personal_website }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collaboration Status (if applicable) -->
+    {% if user.is_authenticated and user.is_artisan and collaboration_status %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <h5>Collaboration Request Status</h5>
+                    <p>
+                        <strong>Status:</strong> 
+                        <span class="badge bg-{% if collaboration_status.status == 'pending' %}warning{% elif collaboration_status.status == 'accepted' %}success{% elif collaboration_status.status == 'rejected' %}danger{% else %}secondary{% endif %}">
+                            {{ collaboration_status.get_status_display }}
+                        </span>
+                    </p>
+                    {% if collaboration_status.status == 'pending' %}
+                        <p class="mb-0">Waiting for artisan response...</p>
+                    {% elif collaboration_status.status == 'accepted' %}
+                        <p class="mb-0">✓ Collaboration accepted! Check your messages for details.</p>
+                    {% elif collaboration_status.status == 'rejected' %}
+                        <p class="mb-0">This collaboration request was rejected.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

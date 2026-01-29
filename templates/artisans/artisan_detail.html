@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ artisan.user.get_full_name }} - Artisan Profile{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Artisan Profile Header -->
+    <div class="row mb-5">
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm text-center">
+                <div style="background: linear-gradient(135deg, #2c5f2d, #4a8f4e); height: 200px; display: flex; align-items: center; justify-content: center; color: white; font-size: 5rem;">
+                    👨‍🎨
+                </div>
+                <div class="card-body">
+                    <h4>{{ artisan.user.get_full_name }}</h4>
+                    <p class="text-muted">{{ artisan.get_craft_type_display }}</p>
+                    
+                    <div class="my-3">
+                        <div class="mb-2">
+                            <strong>⭐ Rating</strong><br>
+                            <span class="badge bg-success">{{ artisan.rating }}/5</span>
+                        </div>
+                        <div class="mb-2">
+                            <strong>📊 Total Sales</strong><br>
+                            <span class="text-dark">{{ artisan.total_sales }}</span>
+                        </div>
+                        <div class="mb-2">
+                            <strong>📦 Products</strong><br>
+                            <span class="text-dark">{{ artisan.total_products }}</span>
+                        </div>
+                        <div>
+                            <strong>⏰ Experience</strong><br>
+                            <span class="text-dark">{{ artisan.years_of_experience }} years</span>
+                        </div>
+                    </div>
+
+                    {% if artisan.is_featured %}
+                        <span class="badge bg-warning text-dark mb-3">⭐ Featured Artisan</span>
+                    {% endif %}
+
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'artisan_products' artisan.id %}" class="btn btn-primary">View Products</a>
+                        
+                        {% if user.is_authenticated and user.is_influencer %}
+                            <a href="{% url 'new_collab_request' %}?artisan_id={{ artisan.id }}" class="btn btn-success">
+                                🤝 Request Collaboration
+                            </a>
+                        {% elif user.is_authenticated %}
+                            <button class="btn btn-outline-secondary" disabled title="Only influencers can request collaborations">
+                                Request Collaboration
+                            </button>
+                        {% else %}
+                            <a href="{% url 'signin' %}?next={% url 'artisan_detail' artisan.id %}" class="btn btn-outline-primary">
+                                Sign in to Collaborate
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Artisan Details -->
+        <div class="col-lg-9">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">About</h3>
+                    <p class="card-text">{{ artisan.description }}</p>
+
+                    <hr>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5>Details</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <strong>📍 Workshop Location:</strong><br>
+                                    {{ artisan.workshop_location }}
+                                </li>
+                                <li class="mb-2">
+                                    <strong>🎨 Craft Type:</strong><br>
+                                    {{ artisan.get_craft_type_display }}
+                                </li>
+                                <li class="mb-2">
+                                    <strong>⏰ Experience:</strong><br>
+                                    {{ artisan.years_of_experience }} years
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h5>Connect</h5>
+                            <ul class="list-unstyled">
+                                {% if artisan.website %}
+                                    <li class="mb-2">
+                                        <strong>🌐 Website:</strong><br>
+                                        <a href="{{ artisan.website }}" target="_blank">{{ artisan.website }}</a>
+                                    </li>
+                                {% endif %}
+                                {% if artisan.instagram_handle %}
+                                    <li class="mb-2">
+                                        <strong>📸 Instagram:</strong><br>
+                                        <a href="https://instagram.com/{{ artisan.instagram_handle }}" target="_blank">@{{ artisan.instagram_handle }}</a>
+                                    </li>
+                                {% endif %}
+                                {% if artisan.facebook_link %}
+                                    <li class="mb-2">
+                                        <strong>📘 Facebook:</strong><br>
+                                        <a href="{{ artisan.facebook_link }}" target="_blank">Facebook Page</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Products -->
+    <div class="row">
+        <div class="col-12">
+            <h3 class="mb-4">Featured Products</h3>
+            {% if products %}
+                <div class="row g-4">
+                    {% for product in products|slice:":6" %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card h-100 border-0 shadow-sm hover-card">
+                                {% if product.image %}
+                                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                                {% else %}
+                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                        <span class="text-muted">No image</span>
+                                    </div>
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ product.name }}</h5>
+                                    {% if product.category %}
+                                        <p class="text-muted small">{{ product.category.name }}</p>
+                                    {% endif %}
+                                    <p class="card-text">{{ product.description|truncatewords:15 }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="h5 mb-0">₹{{ product.price }}</span>
+                                        <span class="badge bg-info">⭐ {{ product.rating }}</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white border-top">
+                                    <a href="{% url 'product_detail' product_id=product.id %}" class="btn btn-sm btn-primary w-100">View Product</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% if products.count > 6 %}
+                    <div class="text-center mt-4">
+                        <a href="{% url 'artisan_products' artisan.id %}" class="btn btn-outline-primary">View All Products</a>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="alert alert-info">This artisan hasn't added any products yet.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

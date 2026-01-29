@@ -50,7 +50,6 @@ def artisan_detail_view(request, artisan_id):
         return render(request, '404.html', status=404)
     
     products = Product.objects.filter(artisan=artisan, status='active')
-    reviews = artisan.user.products.values('review').distinct()
     
     context = {
         'artisan': artisan,

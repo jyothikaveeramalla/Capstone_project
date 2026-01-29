@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}Request Collaboration - Artisan Edge{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <h1 class="mb-4">Send Collaboration Request</h1>
+            
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Select Artisan -->
+                        <div class="mb-4">
+                            <label for="artisan_id" class="form-label">
+                                <strong>Select Artisan</strong>
+                                <span class="text-danger">*</span>
+                            </label>
+                            <select name="artisan_id" id="artisan_id" class="form-select" required>
+                                <option value="">-- Choose an artisan --</option>
+                                {% for artisan in artisans %}
+                                    <option value="{{ artisan.id }}">
+                                        {{ artisan.user.get_full_name }} - {{ artisan.get_craft_type_display }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <small class="text-muted">Choose the artisan you want to collaborate with</small>
+                        </div>
+
+                        <!-- Request Title -->
+                        <div class="mb-4">
+                            <label for="title" class="form-label">
+                                <strong>Collaboration Title</strong>
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                name="title" 
+                                id="title" 
+                                class="form-control" 
+                                placeholder="e.g., Feature Your Products in My YouTube Channel"
+                                maxlength="255"
+                                required
+                            >
+                            <small class="text-muted">Brief title for the collaboration opportunity</small>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-4">
+                            <label for="description" class="form-label">
+                                <strong>Collaboration Description</strong>
+                                <span class="text-danger">*</span>
+                            </label>
+                            <textarea 
+                                name="description" 
+                                id="description" 
+                                class="form-control" 
+                                rows="5"
+                                placeholder="Describe your collaboration idea. What would you like to do with the artisan's products?"
+                                required
+                            ></textarea>
+                            <small class="text-muted">Provide details about what you envision for this collaboration</small>
+                        </div>
+
+                        <!-- Proposed Terms -->
+                        <div class="mb-4">
+                            <label for="proposed_terms" class="form-label">
+                                <strong>Proposed Terms</strong>
+                                <span class="text-danger">*</span>
+                            </label>
+                            <textarea 
+                                name="proposed_terms" 
+                                id="proposed_terms" 
+                                class="form-control" 
+                                rows="5"
+                                placeholder="Include timeline, deliverables, exclusivity terms, etc."
+                                required
+                            ></textarea>
+                            <small class="text-muted">Explain the terms and conditions you're proposing</small>
+                        </div>
+
+                        <!-- Compensation Options -->
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="commission_percentage" class="form-label">
+                                    <strong>Commission Percentage (%)</strong>
+                                </label>
+                                <input 
+                                    type="number" 
+                                    name="commission_percentage" 
+                                    id="commission_percentage" 
+                                    class="form-control" 
+                                    placeholder="e.g., 10"
+                                    min="0"
+                                    max="100"
+                                    step="0.01"
+                                >
+                                <small class="text-muted">Your commission on sales (optional)</small>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label for="flat_rate" class="form-label">
+                                    <strong>Flat Rate (₹)</strong>
+                                </label>
+                                <input 
+                                    type="number" 
+                                    name="flat_rate" 
+                                    id="flat_rate" 
+                                    class="form-control" 
+                                    placeholder="e.g., 5000"
+                                    min="0"
+                                    step="0.01"
+                                >
+                                <small class="text-muted">Fixed rate for collaboration (optional)</small>
+                            </div>
+                        </div>
+
+                        <!-- Attachment -->
+                        <div class="mb-4">
+                            <label for="attachment" class="form-label">
+                                <strong>Attachment</strong>
+                            </label>
+                            <input 
+                                type="file" 
+                                name="attachment" 
+                                id="attachment" 
+                                class="form-control"
+                            >
+                            <small class="text-muted">Attach any files (media kit, proposal, etc.) - Max 10MB</small>
+                        </div>
+
+                        <!-- Help Text -->
+                        <div class="alert alert-info mb-4">
+                            <h6>💡 Tips for a Better Request</h6>
+                            <ul class="mb-0">
+                                <li>Be specific about what you want to do with the artisan's products</li>
+                                <li>Explain your audience and how the collaboration benefits both parties</li>
+                                <li>Be clear about timeline and deliverables</li>
+                                <li>Share your follower counts and engagement rates</li>
+                                <li>Respect the artisan's craft and values</li>
+                            </ul>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">Send Request</button>
+                            <a href="{% url 'artisans_list' %}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

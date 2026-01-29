@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}Browse Influencers - Artisan Edge{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Page Header -->
+    <div class="mb-4">
+        <h1 class="mb-2">Discover Talented Influencers</h1>
+        <p class="lead text-muted">Connect with content creators passionate about sustainable artisan products</p>
+    </div>
+
+    <!-- Search and Filter Bar -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-6">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        class="form-control" 
+                        placeholder="Search by niche, name, or interests..."
+                        value="{{ search }}"
+                    >
+                </div>
+                <div class="col-md-3">
+                    <select name="sort" class="form-select">
+                        <option value="-rating">Highest Rated</option>
+                        <option value="rating">Lowest Rated</option>
+                        <option value="-created_at">Newest</option>
+                        <option value="-total_collaborations">Most Collaborations</option>
+                        <option value="-follower_count">Most Followers</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check mt-2">
+                        <input 
+                            type="checkbox" 
+                            name="verified" 
+                            value="True" 
+                            class="form-check-input" 
+                            id="verifiedCheck"
+                            {% if verified_only %}checked{% endif %}
+                        >
+                        <label class="form-check-label" for="verifiedCheck">
+                            Verified Only
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input 
+                            type="checkbox" 
+                            name="featured" 
+                            value="True" 
+                            class="form-check-input" 
+                            id="featuredCheck"
+                            {% if featured_only %}checked{% endif %}
+                        >
+                        <label class="form-check-label" for="featuredCheck">
+                            Featured Only
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <a href="{% url 'influencers:list' %}" class="btn btn-outline-secondary">Clear</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Influencers Grid -->
+    {% if influencers %}
+        <div class="row g-4 mb-4">
+            {% for influencer in influencers %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm hover-card">
+                        <div style="background: linear-gradient(135deg, #9b59b6, #e74c3c); height: 150px; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                            📸
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="card-title">{{ influencer.user.get_full_name }}</h5>
+                                    <p class="text-muted">{{ influencer.get_niche_display }}</p>
+                                </div>
+                                {% if influencer.is_verified %}
+                                    <span class="badge bg-success" title="Verified">✓</span>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-sm">⭐ Rating</span>
+                                    <strong>{{ influencer.rating }}/5</strong>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-sm">👥 Total Followers</span>
+                                    <strong>{{ influencer.total_followers|default:"0" }}</strong>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-sm">🤝 Collaborations</span>
+                                    <strong>{{ influencer.total_collaborations }}</strong>
+                                </div>
+                            </div>
+
+                            <p class="card-text small text-muted">{{ influencer.bio|truncatewords:20 }}</p>
+
+                            {% if influencer.is_featured %}
+                                <div class="mb-3">
+                                    <span class="badge bg-success">⭐ Featured</span>
+                                </div>
+                            {% endif %}
+
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'influencers:detail' influencer.id %}" class="btn btn-primary">View Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center mt-4">
+            <h5>No influencers found</h5>
+            <p>Try adjusting your search filters</p>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    .hover-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+</style>
+{% endblock %}
