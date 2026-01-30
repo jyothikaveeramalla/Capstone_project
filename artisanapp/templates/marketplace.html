@@ -1,34 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marketplace - Artisan Edge</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        .auth-message {
-            padding: 1rem;
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            border-radius: 8px;
-            margin: 2rem 0;
-            text-align: center;
-            color: #856404;
-        }
+{% extends 'base.html' %}
+{% load static %}
 
-        .auth-message a {
-            color: #0c5460;
-            font-weight: 600;
-            text-decoration: none;
-            border-bottom: 2px solid #0c5460;
-        }
+{% block title %}Marketplace - Artisan Edge{% endblock %}
 
-        .auth-message a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
+{% block content %}
+<style>
+    .auth-message { padding: 1rem; background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; margin: 2rem 0; text-align: center; color: #856404; }
+    .product-grid { margin-top: 2rem; }
+    .product-card .product-price { font-weight: 700; color: var(--dark-text); }
+    .product-info p.small-desc { color: #6c757d; }
+</style>
+
+<div class="container mt-5">
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
@@ -74,7 +57,7 @@
                         <h3>Smart-Woven Khadi Jacket</h3>
                         <p><strong>Artisan:</strong> Meera Devi + AI Design Team</p>
                         <p>Traditional spinning enhanced with moisture-wicking fibers and temperature regulation</p>
-                        <p style="color: #2c5f2d; font-weight: bold;">₹2,499</p>
+                        <p class="product-price">₹2,499</p>
                         <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
                     </div>
                 </div>
@@ -85,7 +68,7 @@
                         <h3>Digital-Cast Silver Jewelry Set</h3>
                         <p><strong>Artisan:</strong> Ravi Kumar + 3D Tech Lab</p>
                         <p>Ancient techniques meet precision 3D modeling for perfect fit and durability</p>
-                        <p style="color: #2c5f2d; font-weight: bold;">₹4,999</p>
+                        <p class="product-price">₹4,999</p>
                         <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
                     </div>
                 </div>
@@ -96,7 +79,7 @@
                         <h3>Heat-Resistant Blue Pottery</h3>
                         <p><strong>Artisan:</strong> Amit Sharma + Materials Lab</p>
                         <p>Traditional glazing enhanced with advanced ceramic compounds for superior durability</p>
-                        <p style="color: #2c5f2d; font-weight: bold;">₹1,899</p>
+                        <p class="product-price">₹1,899</p>
                         <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
                     </div>
                 </div>
@@ -107,7 +90,7 @@
                         <h3>Multi-Function Jute Tote</h3>
                         <p><strong>Artisan:</strong> Priya Das + Design Tech</p>
                         <p>Handwoven jute with integrated phone charging pocket and water-resistant lining</p>
-                        <p style="color: #2c5f2d; font-weight: bold;">₹1,299</p>
+                        <p class="product-price">₹1,299</p>
                         <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
                     </div>
                 </div>
@@ -118,7 +101,7 @@
                         <h3>Climate-Adaptive Pashmina</h3>
                         <p><strong>Artisan:</strong> Sonam Dolkar + Textile Tech</p>
                         <p>Traditional yak wool enhanced with phase-change materials for temperature regulation</p>
-                        <p style="color: #2c5f2d; font-weight: bold;">₹6,999</p>
+                        <p class="product-price">₹6,999</p>
                         <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
                     </div>
                 </div>
@@ -129,7 +112,7 @@
                         <h3>App-Controlled Candle System</h3>
                         <p><strong>Artisan:</strong> Maya Patel + IoT Integration</p>
                         <p>Handmade soy candles with smart diffusion control and scent scheduling via mobile app</p>
-                        <p style="color: #2c5f2d; font-weight: bold;">₹899</p>
+                        <p class="product-price">₹899</p>
                         <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
                     </div>
                 </div>
@@ -140,7 +123,7 @@
                         <h3>Bamboo Fiber Performance Shirt</h3>
                         <p><strong>Artisan:</strong> Kiran Nair + Eco Lab</p>
                         <p>Traditional weaving with bamboo fibers for natural antibacterial and cooling properties</p>
-                        <p style="color: #2c5f2d; font-weight: bold;">₹1,799</p>
+                        <p class="product-price">₹1,799</p>
                         <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
                     </div>
                 </div>
@@ -151,7 +134,7 @@
                         <h3>Smart Traditional Bangles</h3>
                         <p><strong>Artisan:</strong> Lakshmi Reddy + Wearable Tech</p>
                         <p>Classical designs with embedded fitness tracking and notification features</p>
-                        <p style="color: #2c5f2d; font-weight: bold;">₹3,299</p>
+                        <p class="product-price">₹3,299</p>
                         <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
                     </div>
                 </div>
@@ -159,13 +142,13 @@
 
             <!-- Featured Artisan Section -->
             <div style="background: #f0f8f0; padding: 3rem; border-radius: 15px; margin: 4rem 0;">
-                <h3 style="text-align: center; margin-bottom: 2rem; color: #2c5f2d;">Featured Artisan of the Month</h3>
+                <h3 style="text-align: center; margin-bottom: 2rem; color: var(--dark-text);">Featured Artisan of the Month</h3>
                 <div style="display: flex; align-items: center; gap: 3rem; flex-wrap: wrap;">
                     <div style="flex: 1; min-width: 300px;">
-                        <div style="width: 200px; height: 200px; background: linear-gradient(135deg, #2c5f2d, #4a8f4e); border-radius: 50%; margin: 0 auto 2rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem;">👨‍🎨</div>
+                        <div style="width: 200px; height: 200px; background: linear-gradient(135deg, #2c3e50, #6c757d); border-radius: 50%; margin: 0 auto 2rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem;">👨‍🎨</div>
                     </div>
                     <div style="flex: 2; min-width: 300px;">
-                        <h4 style="font-size: 1.8rem; margin-bottom: 1rem; color: #2c5f2d;">Master Craftsman Rajesh Verma</h4>
+                        <h4 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--dark-text);">Master Craftsman Rajesh Verma</h4>
                         <p style="font-size: 1.1rem; margin-bottom: 1rem;"><strong>Specialty:</strong> Traditional Madhubani Painting with Digital Enhancement</p>
                         <p style="margin-bottom: 1rem;">Third-generation artist combining ancestral techniques with UV-resistant inks and digital color matching for museum-quality reproduction and longevity.</p>
                         <p style="margin-bottom: 2rem;"><strong>Featured this month:</strong> Limited edition smart wall art with integrated LED backlighting that responds to ambient light.</p>
@@ -176,7 +159,7 @@
 
             <!-- Trust Indicators -->
             <div style="margin: 4rem 0;">
-                <h3 style="text-align: center; margin-bottom: 2rem; color: #2c5f2d;">Why Shop Artisan Edge</h3>
+                <h3 style="text-align: center; margin-bottom: 2rem; color: var(--dark-text);">Why Shop Artisan Edge</h3>
                 <div class="features-grid">
                     <div class="feature-card">
                         <div class="feature-icon">🛡️</div>
@@ -198,10 +181,10 @@
 
             <!-- Shopping Cart Summary -->
             <div id="cart-summary" style="position: fixed; top: 70px; right: 20px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); padding: 1.5rem; z-index: 999; display: none;">
-                <h4 style="margin-bottom: 1rem; color: #2c5f2d;">Shopping Cart</h4>
+                <h4 style="margin-bottom: 1rem; color: var(--dark-text);">Shopping Cart</h4>
                 <div id="cart-items"></div>
                 <div style="border-top: 1px solid #e8f5e8; margin-top: 1rem; padding-top: 1rem;">
-                    <p style="font-weight: bold; color: #2c5f2d;">Total: ₹<span id="cart-total">0</span></p>
+                    <p style="font-weight: bold; color: var(--dark-text);">Total: ₹<span id="cart-total">0</span></p>
                     <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="checkout()">Checkout</button>
                 </div>
             </div>
@@ -251,85 +234,28 @@
         </div>
     </footer>
 
-    <script src="auth.js"></script>
-    <script src="script.js"></script>
     <script>
-        // Shopping cart functionality
+        // Small client-side helpers (cart is demo-only)
         let cart = [];
-
-        function filterProducts(category) {
-            const products = document.querySelectorAll('.product-card');
-            products.forEach(product => {
-                if (category === 'all' || product.dataset.category === category) {
-                    product.style.display = 'block';
-                } else {
-                    product.style.display = 'none';
-                }
-            });
-            
-            // Update active button
-            const buttons = document.querySelectorAll('.btn-secondary');
-            buttons.forEach(btn => btn.style.background = 'transparent');
-            event.target.style.background = '#2c5f2d';
-        }
-
-        function addToCart(productName, price) {
-            // Check if user is authenticated
-            if (!auth.isLoggedIn()) {
-                auth.setRedirectUrl(window.location.href);
-                const message = document.getElementById('authPrompt');
-                message.style.display = 'block';
-                message.scrollIntoView({ behavior: 'smooth' });
+        function addToCart(name, price){
+            if (!window.auth || !auth.isLoggedIn()){
+                if (window.auth) auth.setRedirectUrl(window.location.href);
+                document.getElementById('authPrompt').style.display = 'block';
                 return;
             }
-
-            cart.push({name: productName, price: price});
-            updateCartDisplay();
+            cart.push({name, price});
+            alert('Added to cart: ' + name);
         }
-
-        function updateCartDisplay() {
-            const cartSummary = document.getElementById('cart-summary');
-            const cartItems = document.getElementById('cart-items');
-            const cartTotal = document.getElementById('cart-total');
-            
-            if (cart.length > 0) {
-                cartSummary.style.display = 'block';
-                cartItems.innerHTML = cart.map(item => 
-                    `<p>${item.name} - ₹${item.price}</p>`
-                ).join('');
-                cartTotal.textContent = cart.reduce((sum, item) => sum + parseInt(item.price.replace(',', '')), 0).toLocaleString();
-            } else {
-                cartSummary.style.display = 'none';
-            }
-        }
-
-        function checkout() {
-            // Check if user is authenticated
-            if (!auth.isLoggedIn()) {
-                auth.setRedirectUrl(window.location.href);
-                alert('Please sign in to proceed with checkout');
-                window.location.href = 'signin.html';
-                return;
-            }
-
-            const user = auth.getCurrentUser();
-            alert(`Order placed successfully for ${user.fullName}!\nTotal: ₹${document.getElementById('cart-total').textContent}\n\nIn production, this would process the payment and create an order in the database.`);
-            cart = [];
-            updateCartDisplay();
-        }
-
-        // Add event listeners to Add to Cart buttons
-        document.addEventListener('DOMContentLoaded', function() {
-            const addToCartButtons = document.querySelectorAll('.product-card .btn-primary');
-            addToCartButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const productCard = this.closest('.product-card');
-                    const productName = productCard.querySelector('h3').textContent;
-                    const productPrice = productCard.querySelector('p[style*="color: #2c5f2d"]').textContent.replace('₹', '').replace(',', '');
-                    addToCart(productName, productPrice);
+        // Attach click handlers
+        document.addEventListener('DOMContentLoaded', function(){
+            document.querySelectorAll('.product-card button').forEach(btn => {
+                btn.addEventListener('click', function(e){
+                    const card = this.closest('.product-card');
+                    const name = card.querySelector('h5').textContent.trim();
+                    const price = card.querySelector('.product-price').textContent.replace('₹','').trim();
+                    addToCart(name, price);
                 });
             });
         });
     </script>
-</body>
-</html>
+{% endblock %}

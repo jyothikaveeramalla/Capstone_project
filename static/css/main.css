@@ -61,7 +61,7 @@ body {
 
 /* Navigation */
 nav {
-    background: linear-gradient(135deg, #2c5f2d 0%, #4a8f4e 100%);
+    background: linear-gradient(135deg, #2c3e50 0%, #6c757d 100%);
     padding: 1rem 0;
     position: fixed;
     top: 0;
@@ -99,12 +99,12 @@ nav {
 }
 
 .nav-menu a:hover {
-    color: #97d69b;
+    color: #adb5bd;
 }
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(135deg, #2c5f2d 0%, #4a8f4e 50%, #97d69b 100%);
+    background: linear-gradient(135deg, #2c3e50 0%, #6c757d 50%, #adb5bd 100%);
     color: white;
     padding: 120px 0 80px;
     text-align: center;
@@ -121,6 +121,13 @@ nav {
     bottom: 0;
     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="leaves" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="30" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="20" cy="70" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="60" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100%" height="100%" fill="url(%23leaves)"/></svg>') repeat;
     opacity: 0.3;
+    pointer-events: none; /* ensure overlay does not block clicks */
+}
+
+/* Ensure hero CTA buttons are interactable above the pseudo-element */
+.hero .btn {
+    position: relative;
+    z-index: 2;
 }
 
 .hero-content {
@@ -163,7 +170,7 @@ nav {
 
 .btn-primary {
     background: white;
-    color: #2c5f2d;
+    color: #2c3e50;
 }
 
 .btn-secondary {
@@ -186,7 +193,7 @@ nav {
     text-align: center;
     font-size: 2.5rem;
     margin-bottom: 3rem;
-    color: #2c5f2d;
+    color: #2c3e50;
 }
 
 /* Features Grid */
@@ -230,7 +237,7 @@ nav {
 
 .stat-item h3 {
     font-size: 3rem;
-    color: #2c5f2d;
+    color: #2c3e50;
     margin-bottom: 0.5rem;
 }
 
@@ -254,7 +261,7 @@ nav {
 .step-icon {
     width: 80px;
     height: 80px;
-    background: linear-gradient(135deg, #2c5f2d, #4a8f4e);
+    background: linear-gradient(135deg, #2c3e50, #6c757d);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -295,7 +302,7 @@ nav {
 
 .product-image {
     height: 200px;
-    background: linear-gradient(45deg, #4a8f4e, #97d69b);
+    background: linear-gradient(45deg, #6c757d, #adb5bd);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -308,7 +315,7 @@ nav {
 }
 
 .eco-badge {
-    background: #2c5f2d;
+    background: #6c757d;
     color: white;
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
@@ -334,7 +341,7 @@ nav {
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #2c5f2d;
+    color: #2c3e50;
     font-weight: 600;
 }
 
@@ -353,7 +360,7 @@ nav {
 .form-group textarea:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #4a8f4e;
+    border-color: #6c757d;
 }
 
 /* Page Content */
@@ -364,7 +371,7 @@ nav {
 
 /* Footer */
 footer {
-    background: #2c5f2d;
+    background: #2c3e50;
     color: white;
     padding: 3rem 0 1rem;
     text-align: center;
