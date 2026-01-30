@@ -27,6 +27,8 @@ def products_list_view(request):
     category = request.GET.get('category')
     if category:
         products = products.filter(category__id=category)
+    # Always pass category as string for template comparison
+    category_str = str(category) if category else ''
     
     # Price range filter
     min_price = request.GET.get('min_price')
@@ -54,7 +56,7 @@ def products_list_view(request):
         'products': products,
         'categories': categories,
         'search': search,
-        'category': category,
+        'category': category_str,
         'sort': sort,
     }
     

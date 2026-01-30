@@ -6,8 +6,8 @@
 <div class="container-fluid mt-4">
     <div class="row">
         <!-- Sidebar Navigation -->
-        <div class="col-lg-3 mb-4">
-            <div class="card border-0 shadow-sm">
+        <div class="sidebar-fixed d-none d-lg-block">
+            <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
                     <h5 class="card-title">{{ user.get_full_name }}</h5>
                     <p class="text-muted small">{{ artisan.craft_type }}</p>
@@ -39,7 +39,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="col-lg-9">
+        <div class="main-content col-lg-9">
             <!-- Welcome Banner -->
             <div class="alert alert-success border-0 shadow-sm" role="alert">
                 <h4 class="alert-heading">Welcome Back, {{ user.first_name }}!</h4>
@@ -123,11 +123,29 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td colspan="5" class="text-center text-muted py-4">
-                                        <i class="fas fa-inbox"></i> No orders yet. Your products are waiting to be discovered!
-                                    </td>
-                                </tr>
+                                {% if recent_orders %}
+                                    {% for order in recent_orders %}
+                                    <tr>
+                                        <td>{{ order.order.order_id }}</td>
+                                        <td>{{ order.customer.get_full_name }}</td>
+                                        <td>
+                                            <ul class="list-unstyled mb-0">
+                                            {% for item in order.items %}
+                                                <li>{{ item.product_name }} (x{{ item.quantity }})</li>
+                                            {% endfor %}
+                                            </ul>
+                                        </td>
+                                        <td>{{ order.total }}</td>
+                                        <td>{{ order.status|title }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-4">
+                                            <i class="fas fa-inbox"></i> No orders yet. Your products are waiting to be discovered!
+                                        </td>
+                                    </tr>
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>

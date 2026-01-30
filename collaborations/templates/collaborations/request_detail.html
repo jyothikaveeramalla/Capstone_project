@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Collaboration Request Details</h2>
+    {% if request_obj %}
+        <ul class="list-group">
+            <li class="list-group-item"><strong>ID:</strong> {{ request_obj.id }}</li>
+            <li class="list-group-item"><strong>Title:</strong> {{ request_obj.title }}</li>
+            <li class="list-group-item"><strong>Description:</strong> {{ request_obj.description }}</li>
+            <li class="list-group-item"><strong>Status:</strong> {{ request_obj.status }}</li>
+            <li class="list-group-item"><strong>Created At:</strong> {{ request_obj.created_at }}</li>
+            <li class="list-group-item"><strong>Requested By:</strong> {{ request_obj.requested_by }}</li>
+        </ul>
+    {% else %}
+        <p>No collaboration request found.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -148,10 +148,30 @@ def dashboard_view(request):
     }
     
     if request.user.is_artisan():
+        import logging
+        logger = logging.getLogger("django.dashboard")
         try:
             artisan = ArtisanProfile.objects.get(user=request.user)
             context['artisan'] = artisan
             context['products_count'] = artisan.products.count()
+            # Get recent order items for this artisan
+            from orders.models import OrderItem
+            recent_items = OrderItem.objects.filter(artisan=request.user).select_related('order', 'product').order_by('-created_at')[:10]
+            # Group by order
+            recent_orders = {}
+            for item in recent_items:
+                oid = item.order.id
+                if oid not in recent_orders:
+                    recent_orders[oid] = {
+                        'order': item.order,
+                        'customer': item.order.customer,
+                        'items': [],
+                        'total': item.order.total_amount,
+                        'status': item.order.order_status,
+                    }
+                recent_orders[oid]['items'].append(item)
+            context['recent_orders'] = list(recent_orders.values())
+            logger.info(f"[DASHBOARD] Artisan {request.user} recent orders count: {len(recent_orders)}")
         except ArtisanProfile.DoesNotExist:
             pass
         return render(request, 'dashboard/artisan_dashboard.html', context)
