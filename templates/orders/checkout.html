@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .checkout-container {
+        max-width: 900px;
+        margin: 40px auto;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: center;
+    }
+    .checkout-card {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        padding: 2rem 2rem 1.5rem 2rem;
+        flex: 1 1 340px;
+        min-width: 320px;
+        max-width: 420px;
+    }
+    .checkout-form label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 500;
+        color: #2c5f2d;
+    }
+    .checkout-form input[type="text"] {
+        width: 100%;
+        padding: 10px 12px;
+        margin-bottom: 18px;
+        border: 1px solid #cfd8dc;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border 0.2s;
+    }
+    .checkout-form input[type="text"]:focus {
+        border: 1.5px solid #4a8f4e;
+        outline: none;
+    }
+    .checkout-form h4 {
+        margin-bottom: 18px;
+        color: #333;
+    }
+    .cart-summary-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1rem;
+    }
+    .cart-summary-table th, .cart-summary-table td {
+        padding: 10px 8px;
+        border-bottom: 1px solid #e0e0e0;
+        text-align: left;
+    }
+    .cart-summary-table th {
+        background: #f5f5f5;
+        color: #2c5f2d;
+        font-weight: 600;
+    }
+    .cart-summary-table tr:last-child td {
+        border-bottom: none;
+    }
+    .checkout-btn {
+        width: 100%;
+        background: linear-gradient(90deg, #2c5f2d 0%, #4a8f4e 100%);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 14px 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 10px;
+        box-shadow: 0 2px 8px rgba(44,95,45,0.08);
+        transition: background 0.2s;
+    }
+    .checkout-btn:hover {
+        background: linear-gradient(90deg, #4a8f4e 0%, #2c5f2d 100%);
+    }
+    @media (max-width: 900px) {
+        .checkout-container {
+            flex-direction: column;
+            align-items: center;
+        }
+        .checkout-card {
+            max-width: 100%;
+        }
+    }
+</style>
+
+<div class="checkout-container">
+    <div class="checkout-card">
+        <form method="POST" class="checkout-form" id="shippingForm" autocomplete="off">
+            {% csrf_token %}
+            <h4>Shipping Information</h4>
+            <label for="full_name">Full Name</label>
+            <input type="text" id="full_name" name="full_name" required>
+            <label for="phone">Phone</label>
+            <input type="text" id="phone" name="phone" required>
+            <label for="address">Address</label>
+            <input type="text" id="address" name="address" required>
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" required>
+            <label for="state">State</label>
+            <input type="text" id="state" name="state" required>
+            <label for="pincode">Pincode</label>
+            <input type="text" id="pincode" name="pincode" required>
+            <button type="submit" class="checkout-btn">Place Order</button>
+        </form>
+    </div>
+    <div class="checkout-card">
+        <h4>Your Cart</h4>
+        <table class="cart-summary-table">
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+            </tr>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.product.price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.get_total_price }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" align="right"><strong>Total:</strong></td>
+                <td><strong>{{ cart_total }}</strong></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script>
+// Frontend validation: prevent submit if any field is empty (trims spaces)
+document.getElementById('shippingForm').addEventListener('submit', function(e) {
+    var requiredFields = ['full_name', 'phone', 'address', 'city', 'state', 'pincode'];
+    var valid = true;
+    requiredFields.forEach(function(field) {
+        var input = document.getElementById(field);
+        if (!input.value.trim()) {
+            input.style.border = '2px solid #e53935';
+            valid = false;
+        } else {
+            input.style.border = '';
+        }
+    });
+    if (!valid) {
+        alert('Please fill all shipping fields.');
+        e.preventDefault();
+    }
+});
+</script>
+{% endblock %}
