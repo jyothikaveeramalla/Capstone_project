@@ -14,20 +14,23 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'artisan', 'category', 'price', 'quantity_in_stock', 'status', 'is_eco_friendly', 'rating', 'created_at')
-    list_filter = ('status', 'is_eco_friendly', 'created_at', 'category')
-    search_fields = ('name', 'artisan__user__email', 'description')
+    list_display = ('name', 'get_owner', 'artisan', 'team', 'category', 'price', 'quantity_in_stock', 'status', 'is_eco_friendly', 'rating', 'created_at')
+    list_filter = ('status', 'is_eco_friendly', 'created_at', 'category', 'team')
+    search_fields = ('name', 'artisan__user__email', 'team__name', 'description')
     readonly_fields = ('rating', 'review_count', 'sold_count', 'created_at', 'updated_at')
     
     fieldsets = (
+        ('Ownership', {
+            'fields': ('artisan', 'team')
+        }),
         ('Basic Info', {
-            'fields': ('artisan', 'name', 'description', 'category', 'image')
+            'fields': ('name', 'description', 'category', 'image')
         }),
         ('Pricing & Stock', {
             'fields': ('price', 'cost_price', 'quantity_in_stock')
         }),
         ('Details', {
-            'fields': ('material', 'dimensions', 'weight', 'is_eco_friendly')
+            'fields': ('material', 'dimensions', 'weight', 'is_eco_friendly', 'sustainability_notes')
         }),
         ('Status', {
             'fields': ('status',)
@@ -41,6 +44,10 @@ class ProductAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+    
+    def get_owner(self, obj):
+        return obj.get_owner_name()
+    get_owner.short_description = 'Owner'
 
 
 @admin.register(Review)

@@ -32,6 +32,7 @@ class Product(models.Model):
     )
     
     artisan = models.ForeignKey(ArtisanProfile, on_delete=models.CASCADE, related_name='products')
+    team = models.ForeignKey('artisans.ArtisanTeam', on_delete=models.SET_NULL, null=True, blank=True, related_name='products')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     
     name = models.CharField(max_length=255)
@@ -72,11 +73,14 @@ class Product(models.Model):
         ordering = ['-created_at']
         indexes = [
             models.Index(fields=['artisan', 'status']),
+            models.Index(fields=['team', 'status']),
             models.Index(fields=['category']),
             models.Index(fields=['-created_at']),
         ]
     
     def __str__(self):
+        if self.team:
+            return f"{self.name} by {self.team.name}"
         return f"{self.name} by {self.artisan.user.get_full_name()}"
     
     def in_stock(self):
@@ -87,6 +91,12 @@ class Product(models.Model):
         if self.cost_price and self.cost_price < self.price:
             return int(((self.price - self.cost_price) / self.price) * 100)
         return 0
+    
+    def get_owner_name(self):
+        """Get the name of the product owner (team or artisan)"""
+        if self.team:
+            return self.team.name
+        return self.artisan.user.get_full_name()
 
 
 class Review(models.Model):
