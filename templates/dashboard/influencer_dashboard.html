@@ -6,8 +6,8 @@
 <div class="container-fluid mt-4">
     <div class="row">
         <!-- Sidebar Navigation -->
-        <div class="col-lg-3 mb-4">
-            <div class="card border-0 shadow-sm">
+        <aside class="dashboard-sidebar col-lg-3 mb-4">
+            <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
                     <h5 class="card-title">{{ user.get_full_name }}</h5>
                     <p class="text-muted small">{{ influencer.niche }}</p>
@@ -39,10 +39,10 @@
                     </nav>
                 </div>
             </div>
-        </div>
+        </aside>
 
         <!-- Main Content -->
-        <div class="col-lg-9">
+        <div class="dashboard-main col-lg-9">
             <!-- Welcome Banner -->
             <div class="alert alert-info border-0 shadow-sm" role="alert">
                 <h4 class="alert-heading">Welcome, {{ user.first_name }}!</h4>
@@ -192,7 +192,8 @@
     }
 
     .card:hover {
-        transform: translateY(-2px);
+        /* removed translate transform to avoid blinking */
+        box-shadow: 0 6px 18px rgba(0,0,0,0.12);
     }
 </style>
 {% endblock %}

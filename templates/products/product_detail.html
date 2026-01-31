@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load currency_filters %}
 
 {% block title %}{{ product.name }} - Artisan Edge{% endblock %}
 
@@ -32,10 +33,17 @@
             </div>
             
             <div class="mb-3">
-                <span class="h3 text-primary">${{ product.price }}</span>
-                {% if product.cost_price %}
-                    <span class="text-muted"><del>${{ product.cost_price }}</del></span>
-                {% endif %}
+                {% with sp=product.selling_price|default:product.price cp=product.original_price|default:product.cost_price %}
+                    {% if cp and cp <= sp %}
+                        {% with sp=product.original_price|default:product.cost_price cp=product.selling_price|default:product.price %}
+                            <span class="h3 text-primary"><strong>{{ sp|usd_to_inr }}</strong></span>
+                            {% if cp %}<span class="text-muted ms-2"><del>{{ cp|usd_to_inr }}</del></span>{% endif %}
+                        {% endwith %}
+                    {% else %}
+                        <span class="h3 text-primary"><strong>{{ sp|usd_to_inr }}</strong></span>
+                        {% if cp %}<span class="text-muted ms-2"><del>{{ cp|usd_to_inr }}</del></span>{% endif %}
+                    {% endif %}
+                {% endwith %}
             </div>
             
             <div class="mb-4">
@@ -57,10 +65,10 @@
             {% if product.quantity_in_stock > 0 %}
                 <form method="post" action="{% url 'add_to_cart' product.id %}" class="mb-4">
                     {% csrf_token %}
-                    <div class="input-group mb-3" style="max-width: 150px;">
-                        <input type="number" name="quantity" class="form-control" value="1" min="1" max="{{ product.quantity_in_stock }}">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                    <div class="d-flex align-items-center gap-2 mb-3 flex-wrap" style="max-width: 350px;">
+                        <input type="number" name="quantity" class="form-control" value="1" min="1" max="{{ product.quantity_in_stock }}" style="max-width: 120px;">
+                        <button type="submit" class="btn btn-primary d-flex align-items-center">
+                            <i class="fas fa-shopping-cart me-2"></i> Add to Cart
                         </button>
                     </div>
                     <input type="hidden" name="next" value="{% url 'product_detail' product.id %}">

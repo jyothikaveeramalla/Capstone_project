@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load currency_filters %}
 
 {% block title %}Home - Artisan Edge{% endblock %}
 
@@ -69,7 +70,15 @@
                                 </span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="h5 mb-0">${{ product.price }}</span>
+                                {% with sp=product.selling_price|default:product.price cp=product.original_price|default:product.cost_price %}
+                                    {% if cp and cp <= sp %}
+                                        {% with sp=product.original_price|default:product.cost_price cp=product.selling_price|default:product.price %}
+                                            <span class="h5 mb-0"><strong>{{ sp|usd_to_inr }}</strong>{% if cp %}<span class="text-muted ms-2"><del>{{ cp|usd_to_inr }}</del></span>{% endif %}</span>
+                                        {% endwith %}
+                                    {% else %}
+                                        <span class="h5 mb-0"><strong>{{ sp|usd_to_inr }}</strong>{% if cp %}<span class="text-muted ms-2"><del>{{ cp|usd_to_inr }}</del></span>{% endif %}</span>
+                                    {% endif %}
+                                {% endwith %}
                                 {% if product.is_eco_friendly %}
                                     <span class="badge bg-success">Eco-friendly</span>
                                 {% endif %}

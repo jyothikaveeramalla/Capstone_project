@@ -56,5 +56,5 @@ class CartItem(models.Model):
         return f"{self.product.name} (x{self.quantity}) in {self.cart.user.username}'s cart"
     
     def get_total_price(self):
-        """Calculate total price for this item"""
-        return self.product.price * self.quantity
+        """Calculate total price for this item using selling_price"""
+        return (self.product.selling_price or self.product.price) * self.quantity

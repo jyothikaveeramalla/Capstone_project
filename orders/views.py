@@ -25,6 +25,42 @@ def orders_list_view(request):
 
 
 # ----------------------------
+# Shipping
+# ----------------------------
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def shipping_view(request):
+    """Collect shipping information and save to session."""
+    if request.method == 'POST':
+        full_name = request.POST.get('full_name', '').strip()
+        email = request.POST.get('email', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        address = request.POST.get('address', '').strip()
+        city = request.POST.get('city', '').strip()
+        state = request.POST.get('state', '').strip()
+        pincode = request.POST.get('pincode', '').strip()
+
+        if not all([full_name, email, phone, address, city, state, pincode]):
+            messages.error(request, 'Please fill all required shipping fields.')
+            return render(request, 'orders/shipping.html', {'shipping': request.session.get('shipping', {})})
+
+        # Save to session
+        request.session['shipping'] = {
+            'full_name': full_name,
+            'email': email,
+            'phone': phone,
+            'address': address,
+            'city': city,
+            'state': state,
+            'pincode': pincode,
+        }
+        return redirect('checkout')
+
+    return render(request, 'orders/shipping.html', {'shipping': request.session.get('shipping', {})})
+
+
+# ----------------------------
 # Checkout
 # ----------------------------
 
@@ -44,37 +80,43 @@ def checkout_view(request):
         messages.error(request, "Your cart is empty.")
         return redirect("products_list")
 
+    # Require shipping data in session for checkout
+    shipping = request.session.get('shipping')
+    if not shipping and request.method == 'GET':
+        messages.info(request, "Please provide shipping information before checking out.")
+        return redirect('shipping')
 
     if request.method == "POST":
         import logging
+        from decimal import Decimal, ROUND_HALF_UP
         logger = logging.getLogger("django.checkout")
 
-        full_name = request.POST.get("full_name", "").strip()
-        email = request.POST.get("email", "").strip()
-        phone = request.POST.get("phone", "").strip()
-        address = request.POST.get("address", "").strip()
-        city = request.POST.get("city", "").strip()
-        state = request.POST.get("state", "").strip()
-        pincode = request.POST.get("pincode", "").strip()
-
-        logger.info(f"[CHECKOUT] User: {request.user}, Name: {full_name}, Email: {email}, Phone: {phone}")
+        # Use shipping info from session
+        shipping = request.session.get('shipping', {})
+        full_name = shipping.get('full_name', '').strip()
+        email = shipping.get('email', '').strip()
+        phone = shipping.get('phone', '').strip()
+        address = shipping.get('address', '').strip()
+        city = shipping.get('city', '').strip()
+        state = shipping.get('state', '').strip()
+        pincode = shipping.get('pincode', '').strip()
 
         if not all([full_name, email, phone, address, city, state, pincode]):
             messages.error(request, "Please fill all shipping fields.")
-            return render(request, "orders/checkout.html", {
-                "cart_items": cart_items,
-                "cart_total": cart.get_total_price()
-            })
+            return redirect('shipping')
 
         # Server-side stock validation
         for item in cart_items:
             if item.quantity > item.product.quantity_in_stock:
                 messages.error(request, f"Not enough stock for {item.product.name}. Only {item.product.quantity_in_stock} left.")
                 logger.warning(f"[CHECKOUT] Stock error for {item.product.name}: requested {item.quantity}, in stock {item.product.quantity_in_stock}")
-                return render(request, "orders/checkout.html", {
-                    "cart_items": cart_items,
-                    "cart_total": cart.get_total_price()
-                })
+                return redirect('checkout')
+
+        # shipping cost in INR (configurable via settings)
+        from django.conf import settings
+        rate = Decimal(getattr(settings, 'USD_TO_INR_RATE', 83))
+        shipping_inr = Decimal(getattr(settings, 'SHIPPING_COST_INR', 50))
+        shipping_usd = (shipping_inr / rate).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
         with transaction.atomic():
             order = Order.objects.create(
@@ -88,7 +130,8 @@ def checkout_view(request):
                 shipping_postal_code=pincode,
                 shipping_country="India",
                 subtotal=cart.get_total_price(),
-                total_amount=cart.get_total_price(),
+                shipping_cost=shipping_usd,
+                total_amount=(cart.get_total_price() + shipping_usd),
             )
             logger.info(f"[ORDER] Created order {order.order_id} for user {request.user}")
 
@@ -102,7 +145,7 @@ def checkout_view(request):
                     product=item.product,
                     artisan=artisan_user,
                     product_name=item.product.name,
-                    product_price=item.product.price,
+                    product_price=(item.product.selling_price if item.product.selling_price is not None else item.product.price),
                     quantity=item.quantity,
                     subtotal=item.get_total_price(),
                 )
@@ -116,13 +159,25 @@ def checkout_view(request):
                 logger.info(f"[CHECKOUT] Stock updated for {item.product.name}: now {item.product.quantity_in_stock}")
 
             cart.clear()
+            # Clear shipping session after successful order
+            if 'shipping' in request.session:
+                del request.session['shipping']
             logger.info(f"[CHECKOUT] Order {order.order_id} placed by {request.user}")
 
         return redirect("order_success", order_id=order.id)
 
+    # GET: show summary with shipping from session
+    from decimal import Decimal
+    from django.conf import settings
+    rate = Decimal(getattr(settings, 'USD_TO_INR_RATE', 83))
+    shipping_inr = Decimal(getattr(settings, 'SHIPPING_COST_INR', 50))
+    shipping_usd = (shipping_inr / rate).quantize(Decimal('0.01'))
+
     return render(request, "orders/checkout.html", {
         "cart_items": cart_items,
-        "cart_total": cart.get_total_price()
+        "cart_total": cart.get_total_price(),
+        "shipping": shipping,
+        "shipping_usd": shipping_usd
     })
 
 

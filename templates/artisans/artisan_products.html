@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load currency_filters %}
 
 {% block title %}{{ artisan.user.get_full_name }} — Products{% endblock %}
 
@@ -49,7 +50,17 @@
                 <div class="card-body">
                   <h5 class="card-title">{{ product.name }}</h5>
                   <p class="card-text small text-muted">{% if product.category %}{{ product.category.name }}{% endif %}</p>
-                  <p class="card-text"><strong>₹{{ product.price }}</strong></p>
+                  <p class="card-text">
+                    {% with sp=product.selling_price|default:product.price cp=product.original_price|default:product.cost_price %}
+                        {% if cp and cp <= sp %}
+                            {% with sp=product.original_price|default:product.cost_price cp=product.selling_price|default:product.price %}
+                                <strong>{{ sp|usd_to_inr }}</strong>{% if cp %}<span class="text-muted ms-2"><del>{{ cp|usd_to_inr }}</del></span>{% endif %}
+                            {% endwith %}
+                        {% else %}
+                            <strong>{{ sp|usd_to_inr }}</strong>{% if cp %}<span class="text-muted ms-2"><del>{{ cp|usd_to_inr }}</del></span>{% endif %}
+                        {% endif %}
+                    {% endwith %}
+                  </p>
                   
                   {% if product.is_eco_friendly %}
                     <span class="badge bg-success mb-2">♻️ Eco-Friendly</span>

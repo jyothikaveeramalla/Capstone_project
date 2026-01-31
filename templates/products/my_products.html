@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load currency_filters %}
 
 {% block title %}My Products - Artisan Edge{% endblock %}
 
@@ -108,7 +109,19 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td><strong>${{ product.price }}</strong></td>
+                                        <td>
+                                            {% with sp=product.selling_price|default:product.price cp=product.original_price|default:product.cost_price %}
+                                                {% if cp and cp <= sp %}
+                                                    {% with sp=product.original_price|default:product.cost_price cp=product.selling_price|default:product.price %}
+                                                        <strong>{{ sp|usd_to_inr }}</strong>
+                                                        {% if cp %}<span class="text-muted ms-2"><del>{{ cp|usd_to_inr }}</del></span>{% endif %}
+                                                    {% endwith %}
+                                                {% else %}
+                                                    <strong>{{ sp|usd_to_inr }}</strong>
+                                                    {% if cp %}<span class="text-muted ms-2"><del>{{ cp|usd_to_inr }}</del></span>{% endif %}
+                                                {% endif %}
+                                            {% endwith %}
+                                        </td>
                                         <td>{{ product.quantity_in_stock }}</td>
                                         <td>
                                             {% if product.status == 'active' %}
@@ -172,7 +185,7 @@
                             <div class="card-body">
                                 <div style="font-size: 2rem; margin-bottom: 0.5rem;">💰</div>
                                 <p class="text-muted small mb-0">Revenue</p>
-                                <h4 class="mb-0">$0</h4>
+                                <h4 class="mb-0">₹0</h4>
                             </div>
                         </div>
                     </div>

@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
+{% load currency_filters %}
 {% block content %}
 <h2>Order Placed Successfully!</h2>
 <p>Thank you for your order, {{ order.shipping_name }}.</p>
 <h4>Order Summary</h4>
 <p><strong>Order ID:</strong> {{ order.order_id }}</p>
-<p><strong>Total Amount:</strong> {{ order.total_amount }}</p>
+<p><strong>Total Amount:</strong> {{ order.total_amount|usd_to_inr }}</p>
 <p><strong>Shipping Address:</strong> {{ order.shipping_address }}, {{ order.shipping_city }}, {{ order.shipping_state }} - {{ order.shipping_postal_code }}</p>
 <table border="1" cellpadding="5">
     <tr>
@@ -16,9 +17,9 @@
     {% for item in order_items %}
     <tr>
         <td>{{ item.product_name }}</td>
-        <td>{{ item.product_price }}</td>
+        <td>{{ item.product_price|usd_to_inr }}</td>
         <td>{{ item.quantity }}</td>
-        <td>{{ item.subtotal }}</td>
+        <td>{{ item.subtotal|usd_to_inr }}</td>
     </tr>
     {% endfor %}
 </table>

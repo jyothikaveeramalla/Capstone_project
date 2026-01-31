@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load currency_filters %}
 {% block content %}
 <style>
 .checkout-container {
@@ -137,13 +138,13 @@
             <li>
                 <span>{{ item.product.name }}</span>
                 <span>x{{ item.quantity }}</span>
-                <span>₹{{ item.total_price }}</span>
+                <span>{{ item.total_price|usd_to_inr }}</span>
             </li>
             {% endfor %}
         </ul>
         <div class="cart-summary-total">
             <span>Total</span>
-            <span>₹{{ cart_total }}</span>
+            <span>{{ cart_total|usd_to_inr }}</span>
         </div>
     </div>
 </div>

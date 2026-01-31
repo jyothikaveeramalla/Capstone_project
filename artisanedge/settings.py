@@ -166,6 +166,14 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Currency and pricing limits (presentation stored in USD, display in INR)
+USD_TO_INR_RATE = 83  # 1 USD = 83 INR
+MIN_PRICE_INR = 500
+MAX_PRICE_INR = 5000
+
+# Shipping defaults (INR)
+SHIPPING_COST_INR = 50
+
 # Logging
 LOGGING = {
     'version': 1,

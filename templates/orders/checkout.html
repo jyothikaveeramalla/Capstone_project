@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load currency_filters %}
 {% block content %}
 <style>
     .checkout-container {
@@ -89,25 +90,19 @@
 
 <div class="checkout-container">
     <div class="checkout-card">
-        <form method="POST" class="checkout-form" id="shippingForm" autocomplete="off">
-            {% csrf_token %}
-            <h4>Shipping Information</h4>
-            <label for="full_name">Full Name</label>
-            <input type="text" id="full_name" name="full_name" required>
-            <label for="email">Email</label>
-            <input type="text" id="email" name="email" required>
-            <label for="phone">Phone</label>
-            <input type="text" id="phone" name="phone" required>
-            <label for="address">Address</label>
-            <input type="text" id="address" name="address" required>
-            <label for="city">City</label>
-            <input type="text" id="city" name="city" required>
-            <label for="state">State</label>
-            <input type="text" id="state" name="state" required>
-            <label for="pincode">Pincode</label>
-            <input type="text" id="pincode" name="pincode" required>
-            <button type="submit" class="checkout-btn">Place Order</button>
-        </form>
+        <h4>Shipping</h4>
+        {% if shipping %}
+            <p><strong>{{ shipping.full_name }}</strong></p>
+            <p>{{ shipping.address }}<br>{{ shipping.city }}, {{ shipping.state }} - {{ shipping.pincode }}</p>
+            <p>Phone: {{ shipping.phone }}</p>
+            <form method="post" action="">
+                {% csrf_token %}
+                <button type="submit" class="checkout-btn">Place Order</button>
+                <a href="{% url 'shipping' %}" class="btn btn-outline-secondary ms-2">Edit Address</a>
+            </form>
+        {% else %}
+            <div class="alert alert-info">No shipping address selected. <a href="{% url 'shipping' %}">Add one</a>.</div>
+        {% endif %}
     </div>
     <div class="checkout-card">
         <h4>Your Cart</h4>
@@ -121,14 +116,32 @@
             {% for item in cart_items %}
             <tr>
                 <td>{{ item.product.name }}</td>
-                <td>{{ item.product.price }}</td>
+                <td>
+                    {% with sp=item.product.selling_price|default:item.product.price cp=item.product.original_price|default:item.product.cost_price %}
+                        {% if cp and cp <= sp %}
+                            {% with sp=item.product.original_price|default:item.product.cost_price cp=item.product.selling_price|default:item.product.price %}
+                                <strong>{{ sp|usd_to_inr }}</strong>{% if cp %}<span class="text-muted ms-2"><del>{{ cp|usd_to_inr }}</del></span>{% endif %}
+                            {% endwith %}
+                        {% else %}
+                            <strong>{{ sp|usd_to_inr }}</strong>{% if cp %}<span class="text-muted ms-2"><del>{{ cp|usd_to_inr }}</del></span>{% endif %}
+                        {% endif %}
+                    {% endwith %}
+                </td>
                 <td>{{ item.quantity }}</td>
-                <td>{{ item.get_total_price }}</td>
+                <td>{{ item.get_total_price|usd_to_inr }}</td>
             </tr>
             {% endfor %}
             <tr>
+                <td colspan="3" align="right"><strong>Subtotal:</strong></td>
+                <td><strong>{{ cart_total|usd_to_inr }}</strong></td>
+            </tr>
+            <tr>
+                <td colspan="3" align="right"><strong>Shipping:</strong></td>
+                <td>{{ shipping_usd|usd_to_inr }}</td>
+            </tr>
+            <tr>
                 <td colspan="3" align="right"><strong>Total:</strong></td>
-                <td><strong>{{ cart_total }}</strong></td>
+                <td><strong>{{ cart_total|add:shipping_usd|usd_to_inr }}</strong></td>
             </tr>
         </table>
     </div>

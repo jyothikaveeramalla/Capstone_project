@@ -1,4 +1,6 @@
 /* --- Sidebar Fix --- */
+/* New unified sidebar class for dashboards */
+.dashboard-sidebar,
 .sidebar-fixed {
         position: fixed;
         top: 80px; /* height of navbar */
@@ -6,30 +8,35 @@
         width: 260px;
         height: calc(100vh - 80px);
         background: linear-gradient(135deg, #2c5f2d 0%, #4a8f4e 100%);
-        z-index: 100;
+        z-index: 1050; /* sits below navbar (which is 1100) and above content */
         overflow-y: auto;
         box-shadow: 2px 0 8px rgba(44,95,45,0.08);
 }
 
 @media (max-width: 991.98px) {
+    .dashboard-sidebar,
     .sidebar-fixed {
         position: static;
         width: 100%;
         height: auto;
         box-shadow: none;
     }
+    .dashboard-main,
     .main-content {
         margin-left: 0 !important;
     }
 }
 
-/* Main content margin for sidebar */
+/* Main content margin for sidebar (applies on large screens) */
+.dashboard-main,
 .main-content {
         margin-left: 260px;
         transition: margin-left 0.2s;
+        z-index: 1; /* ensure content is below sidebar */
 }
 
 @media (max-width: 991.98px) {
+    .dashboard-main,
     .main-content {
         margin-left: 0;
     }
@@ -44,6 +51,37 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+/* Navbar stacking */
+nav, .navbar {
+    position: sticky; /* ensures it stays at top */
+    top: 0;
+    z-index: 1100; /* top-most in dashboard area */
+}
+
+/* Remove translateY hover transforms that cause blinking; keep box-shadow changes only */
+.card {
+    transition: box-shadow 0.25s ease;
+}
+
+.card:hover {
+    /* no positional transform to avoid blinking */
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.btn:hover {
+    /* avoid movement on hover */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+.feature-card {
+    transition: box-shadow 0.25s ease;
+}
+
+.feature-card:hover {
+    transform: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.10);
 }
 
 body {
@@ -63,10 +101,9 @@ body {
 nav {
     background: linear-gradient(135deg, #2c3e50 0%, #6c757d 100%);
     padding: 1rem 0;
-    position: fixed;
+    position: sticky; /* stays at top without removing it from flow */
     top: 0;
-    width: 100%;
-    z-index: 1000;
+    z-index: 1100; /* placed above sidebar */
     backdrop-filter: blur(10px);
 }
 
@@ -138,14 +175,12 @@ nav {
 .hero h1 {
     font-size: 3.5rem;
     margin-bottom: 1rem;
-    animation: fadeInUp 1s ease;
 }
 
 .hero p {
     font-size: 1.3rem;
     margin-bottom: 2rem;
     opacity: 0.9;
-    animation: fadeInUp 1s ease 0.2s both;
 }
 
 .cta-buttons {
@@ -153,10 +188,6 @@ nav {
     justify-content: center;
     gap: 1rem;
     flex-wrap: wrap;
-    animation: fadeInUp 1s ease 0.4s both;
-}
-
-.btn {
     padding: 15px 30px;
     border: none;
     border-radius: 50px;
@@ -180,8 +211,7 @@ nav {
 }
 
 .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+
 }
 
 /* Section Styling */
@@ -210,17 +240,11 @@ nav {
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     text-align: center;
-    transition: transform 0.3s ease;
+    transition: box-shadow 0.3s ease;
 }
 
 .feature-card:hover {
-    transform: translateY(-10px);
-}
-
-.feature-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
+    box-shadow: 0 10px 30px rgba(0,0,0,0.10);
 
 /* Stats Section */
 .stats {
